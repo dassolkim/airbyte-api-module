@@ -36,7 +36,7 @@ function createSource() {
     };
     return rp(options, function (error, respose, body) {
         if (error) {
-            console.log('error');
+            console.log(error);
         } else {
             var result = body;
             return result;
@@ -56,7 +56,7 @@ function getSource(sourceId){
     };
     return rp(options, function (error, respose, body) {
         if (error) {
-            console.log('error');
+            console.log(error);
         } else {
             var result = body;
             return result;
@@ -77,7 +77,7 @@ function discoverSchema(sourceId) {
     };
     return rp(options, function (error, respose, body) {
         if (error) {
-            console.log('error');
+            console.log(error);
         } else {
             var result = body
             return result;
@@ -98,7 +98,7 @@ function deleteSource(sourceId) {
     };
     return rp(options, function (error, respose, body) {
         if (error) {
-            console.log('error');
+            console.log(error);
         } else {
             var result = body;
             return result;

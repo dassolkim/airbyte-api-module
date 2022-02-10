@@ -9,6 +9,7 @@ const destinationDefinitionId = "25c5221d-dce2-4163-ade9-739ef790f503"
 const defaultUrl = "http://114.70.235.40:18000/api/v1/"
 const sourceDefinitionId = "decd338e-5647-4c0b-adf4-da0e75f5a750"
 const dbConfig = require('./connectConfig.js')
+
 function main(){
     console.log("discover logic is start")
     console.log("datasetId: ", datasetId)
@@ -41,14 +42,6 @@ function createSource() {
             return result;
         }
     })
-    // request.post(options, function (err, response, body){
-    //       console.log("create source complete")
-    //       const res = body
-    //       console.log(typeof res)
-    //       console.log("result: ", res)
-    //       callback(response.body)
-          
-    //   });
 }
 
 function getSource(sourceId){
@@ -69,7 +62,6 @@ function getSource(sourceId){
             return result;
         }
     })
-
 }
 
 function discoverSchema(sourceId) {

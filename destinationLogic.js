@@ -1,9 +1,6 @@
-const uuidv1 = require('uuid/v1')
 const rp = require('request-promise-native')
-const datasetId = uuidv1()
 const configInfo = require('./connectConfig.js')
 
-// console.log("datasetId: ", datasetId)
 module.exports = destinationLogic
 
 function createDestination() {
@@ -75,8 +72,6 @@ async function destinationLogic(delDestination) {
     try{
         console.time('api call during time')
         var destination = await createDestination()
-        // console.log(source)
-
         if (destination != null){
             var destinationId = destination.destinationId
             console.log("destinationId: ", destinationId)
@@ -95,5 +90,4 @@ async function destinationLogic(delDestination) {
     }
     return getDestinationResult
 }
-
 // destinationLogic()

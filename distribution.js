@@ -3,8 +3,8 @@ const destinationLogic = require('./destinationLogic.js')
 const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+
-// const datasetId = uuidv1()
-// console.log("datasetId: ", datasetId)
+const datasetId = uuidv1()
+console.log("datasetId: ", datasetId)
 
 async function main(){
     
@@ -14,7 +14,8 @@ async function main(){
     console.log("Start sourceLogic")
     var sResult = await sourceLogic(delSource)
     console.log(sResult)
-    // original value: false
+    
+    // original delSource value is false
     if (sResult != null && delSource == false){
         console.log("Start destinationLogic")
         var dResult = await destinationLogic(delDestination)

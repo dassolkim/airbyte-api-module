@@ -1,11 +1,7 @@
-const uuidv1 = require('uuid/v1')
 const rp = require('request-promise-native')
 const request = require('request');
 const res = require('express/lib/response');
-const datasetId = uuidv1()
 const configInfo = require('./connectConfig.js')
-
-// console.log("datasetId: ", datasetId)
 
 // shared api
 module.exports = discoverLogic
@@ -127,4 +123,3 @@ async function discoverLogic(delSource) {
     return catalog
     // console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
 }
-

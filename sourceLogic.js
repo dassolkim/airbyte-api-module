@@ -117,9 +117,14 @@ async function discoverLogic(delSource) {
             console.log("source deletion is done")
         } else { console.log("delete source api does not work")}
         console.timeEnd('api call during time')
+        if (delSource != true){
+            return sourceId
+        }
+        else {
+            return catalog
+        }
     } catch (error) {
         console.log(error)
     }
-    return catalog
     // console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
 }

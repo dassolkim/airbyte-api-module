@@ -8,18 +8,18 @@ console.log("datasetId: ", datasetId)
 
 async function main(){
     
-    var delSource = true
-    var delDestination = true
+    var delSource = false
+    var delDestination = false
 
     console.log("Start sourceLogic")
     var sResult = await sourceLogic(delSource)
-    console.log(sResult)
-    
+    console.log("sourceLogic return: ", sResult)
+
     // original delSource value is false
     if (sResult != null && delSource == false){
         console.log("Start destinationLogic")
         var dResult = await destinationLogic(delDestination)
-        console.log(dResult)
+        console.log("destinationLogic return: ", dResult)
     }
 }
 if (require.main == module){

@@ -85,9 +85,14 @@ async function destinationLogic(delDestination) {
             console.log("destination deletion is done")
         } else { console.log("delete destination api does not work")}
         console.timeEnd('api call during time')
+        if (delDestination != true) {
+            return destinationId
+        }
+        else {
+            return getDestinationResult
+        }
     } catch (error) {
         console.log(error)
     }
-    return getDestinationResult
 }
 // destinationLogic()

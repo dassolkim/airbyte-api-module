@@ -2,18 +2,13 @@ const uuidv1 = require('uuid/v1')
 const rp = require('request-promise-native')
 const request = require('request');
 const res = require('express/lib/response');
-
 const datasetId = uuidv1()
 const configInfo = require('./connectConfig.js')
 
-function main(){
-    console.log("Start discoverLogic")
-    console.log("datasetId: ", datasetId)
-    discoverLogic()
-}
-if (require.main == module){
-    main()
-}
+// console.log("datasetId: ", datasetId)
+
+// shared api
+module.exports = discoverLogic
 
 function createSource() {
     var url = configInfo.defaultUrl + "sources/create"
@@ -102,7 +97,7 @@ function deleteSource(sourceId) {
     })
 }
 
-async function discoverLogic() {
+async function discoverLogic(delSource) {
     try{
         console.time('api call during time')
         var source = await createSource()
@@ -117,10 +112,10 @@ async function discoverLogic() {
         if (getSourceResult != null){
             var discoverResult = await discoverSchema(sourceId)
             var catalog = discoverResult.catalog
-            console.log(JSON.stringify(discoverResult, null, 2))
+            console.log(JSON.stringify(catalog, null, 2))
             console.log("source validation is done")
         } else { console.log("discover_schema does not work")}
-        if (discoverResult != null){
+        if (discoverResult != null && delSource == true){
             var deleteSourceResult = await deleteSource(sourceId)
             console.log(deleteSourceResult)
             console.log("source deletion is done")
@@ -129,6 +124,7 @@ async function discoverLogic() {
     } catch (error) {
         console.log(error)
     }
-    console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
+    return catalog
+    // console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
 }
 

@@ -1,5 +1,5 @@
-const sourceLogic = require('./sourceLogic.js')
-const destinationLogic = require('./destinationLogic.js')
+const sourceLogic = require('./sourceLogic')
+const destinationLogic = require('./destinationLogic')
 const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+
@@ -12,15 +12,27 @@ async function main(){
     var delDestination = false
 
     console.log("Start sourceLogic")
-    var sResult = await sourceLogic(delSource)
-    console.log("sourceLogic return: ", sResult)
+    var discoverLogicReturn = await sourceLogic.discoverLogic(delSource)
+    console.log("sourceLogic return: ", discoverLogicReturn)
 
-    // original delSource value is false
-    if (sResult != null && delSource == false){
+    // test multi module.exports
+    /** var discoverLogicReturn = await sourceLogic.discoverLogic(delSource)
+    console.log("sourceLogic return: ", discoverLogicReturn)
+    if (discoverLogicReturn != null && delSource == false) {
+        var getSourceReturn = await sourceLogic.getSource(discoverLogicReturn)
+        var getSourceId = getSourceReturn.sourceId
+        console.log("This result is getSource() return : ", getSourceReturn)
+    
+    sourceLogic.deleteSource(getSourceId)
+    **/     
+
+    // right delSource is false
+    if (discoverLogicReturn != null && delSource == false){
         console.log("Start destinationLogic")
-        var dResult = await destinationLogic(delDestination)
-        console.log("destinationLogic return: ", dResult)
+        var destinationLogicReturn = await destinationLogic(delDestination)
+        console.log("destinationLogic return: ", destinationLogicReturn)
     }
+    
 }
 if (require.main == module){
     main()

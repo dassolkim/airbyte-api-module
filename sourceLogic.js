@@ -4,7 +4,8 @@ const res = require('express/lib/response');
 const configInfo = require('./connectConfig.js')
 
 // shared api
-module.exports = discoverLogic
+// module.exports = discoverLogic
+module.exports = {discoverLogic, getSource, discoverSchema, deleteSource}
 
 function createSource() {
     var url = configInfo.defaultUrl + "sources/create"

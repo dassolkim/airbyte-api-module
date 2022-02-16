@@ -1,7 +1,7 @@
 const rp = require('request-promise-native')
-const configInfo = require('./connectConfig.js')
+const configInfo = require('../../config/connectConfig')
 
-module.exports = destinationLogic
+module.exports = {destinationLogic, createDestination, getDestination, deleteDestination}
 
 function createDestination() {
     var url = configInfo.defaultUrl + "destinations/create"
@@ -28,7 +28,7 @@ function createDestination() {
     })
 }
 
-function getDestinatin(destinationId){
+function getDestination(destinationId){
     var url = configInfo.defaultUrl + "destinations/get"
     const options = {
         uri: url,
@@ -70,12 +70,12 @@ function deleteDestination(destinationId) {
 
 async function destinationLogic(delDestination) {
     try{
-        console.time('api call during time')
+        // console.time('api call during time')
         var destination = await createDestination()
         if (destination != null){
             var destinationId = destination.destinationId
             console.log("destinationId: ", destinationId)
-            var getDestinationResult = await getDestinatin(destinationId)
+            var getDestinationResult = await getDestination(destinationId)
             console.log(getDestinationResult)
             console.log("destination lookup is done")
         } else { console.log("get destination api does not work")}
@@ -84,7 +84,7 @@ async function destinationLogic(delDestination) {
             console.log(deleteDestinationResult)
             console.log("destination deletion is done")
         } else { console.log("delete destination api does not work")}
-        console.timeEnd('api call during time')
+        // console.timeEnd('api call during time')
         if (delDestination != true) {
             return destinationId
         }
@@ -95,4 +95,3 @@ async function destinationLogic(delDestination) {
         console.log(error)
     }
 }
-// destinationLogic()

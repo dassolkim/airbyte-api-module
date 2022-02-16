@@ -1,5 +1,5 @@
-const sourceLogic = require('./sourceLogic')
-const destinationLogic = require('./destinationLogic')
+const sourceLogic = require('./airbyte/sourceLogic')
+const destinationLogic = require('./airbyte/destinationLogic')
 const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+
@@ -8,8 +8,8 @@ console.log("datasetId: ", datasetId)
 
 async function main(){
     
-    var delSource = false
-    var delDestination = false
+    var delSource = true
+    var delDestination = true
 
     console.log("Start sourceLogic")
     var discoverLogicReturn = await sourceLogic.discoverLogic(delSource)

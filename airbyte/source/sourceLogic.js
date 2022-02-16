@@ -1,11 +1,11 @@
 const rp = require('request-promise-native')
 const request = require('request');
 const res = require('express/lib/response');
-const configInfo = require('./connectConfig.js')
+const configInfo = require('../../config/connectConfig')
 
 // shared api
 // module.exports = discoverLogic
-module.exports = {discoverLogic, getSource, discoverSchema, deleteSource}
+module.exports = {discoverLogic, createSource, getSource, discoverSchema, deleteSource}
 
 function createSource() {
     var url = configInfo.defaultUrl + "sources/create"
@@ -96,7 +96,7 @@ function deleteSource(sourceId) {
 
 async function discoverLogic(delSource) {
     try{
-        console.time('api call during time')
+        // console.time('api call during time')
         var source = await createSource()
         // console.log(source)
         if (source != null){
@@ -117,7 +117,7 @@ async function discoverLogic(delSource) {
             console.log(deleteSourceResult)
             console.log("source deletion is done")
         } else { console.log("delete source api does not work")}
-        console.timeEnd('api call during time')
+        // console.timeEnd('api call during time')
         if (delSource != true){
             return sourceId
         }

@@ -1,5 +1,5 @@
-const sourceLogic = require('./airbyte/sourceLogic')
-const destinationLogic = require('./airbyte/destinationLogic')
+const sourceLogic = require('./airbyte/source/sourceLogic')
+const destinationLogic = require('./airbyte/destination/destinationLogic')
 const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+
@@ -14,18 +14,7 @@ async function main(){
     console.log("Start sourceLogic")
     var discoverLogicReturn = await sourceLogic.discoverLogic(delSource)
     console.log("sourceLogic return: ", discoverLogicReturn)
-
-    // test multi module.exports
-    /** var discoverLogicReturn = await sourceLogic.discoverLogic(delSource)
-    console.log("sourceLogic return: ", discoverLogicReturn)
-    if (discoverLogicReturn != null && delSource == false) {
-        var getSourceReturn = await sourceLogic.getSource(discoverLogicReturn)
-        var getSourceId = getSourceReturn.sourceId
-        console.log("This result is getSource() return : ", getSourceReturn)
     
-    sourceLogic.deleteSource(getSourceId)
-    **/     
-
     // right delSource is false
     if (discoverLogicReturn != null && delSource == false){
         console.log("Start destinationLogic")

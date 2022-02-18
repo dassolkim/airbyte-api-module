@@ -1,5 +1,5 @@
 const rp = require('request-promise-native')
-const configInfo = require('../config/connectConfig.js')
+const configInfo = require('../../config/connectConfig.js')
 const sourceLogic = require('./sourceLogic.js')
 
 

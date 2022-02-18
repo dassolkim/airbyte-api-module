@@ -6,7 +6,7 @@ module.exports = {destinationLogic, createDestination, getDestination, deleteDes
 function createDestination() {
     var url = configInfo.defaultUrl + "destinations/create"
     var connectionConfiguration = configInfo.connectDestination
-    var destinationName = "nodeCreateDestination"
+    var destinationName = "nodeCreateDestination1"
     const options = {
         uri: url,
         method: 'POST',
@@ -70,7 +70,7 @@ function deleteDestination(destinationId) {
 
 async function destinationLogic(delDestination) {
     try{
-        // console.time('api call during time')
+        console.time('distribution api call during time')
         var destination = await createDestination()
         if (destination != null){
             var destinationId = destination.destinationId
@@ -84,7 +84,7 @@ async function destinationLogic(delDestination) {
             console.log(deleteDestinationResult)
             console.log("destination deletion is done")
         } else { console.log("delete destination api does not work")}
-        // console.timeEnd('api call during time')
+        console.timeEnd('distribution api call during time')
         if (delDestination != true) {
             return destinationId
         }

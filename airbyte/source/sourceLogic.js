@@ -10,7 +10,7 @@ module.exports = {discoverLogic, createSource, getSource, discoverSchema, delete
 function createSource() {
     var url = configInfo.defaultUrl + "sources/create"
     var connectionConfiguration = configInfo.connectSource
-    var sourceName = "nodeCreateSource"
+    var sourceName = "nodeCreateSource1"
     const options = {
         uri: url,
         method: 'POST',
@@ -96,9 +96,9 @@ function deleteSource(sourceId) {
 
 async function discoverLogic(delSource) {
     try{
-        // console.time('api call during time')
+        console.time('source api call during time')
         var source = await createSource()
-        // console.log(source)
+        console.log(source)
         if (source != null){
             var sourceId = source.sourceId
             console.log("sourceId: ", sourceId)
@@ -117,7 +117,7 @@ async function discoverLogic(delSource) {
             console.log(deleteSourceResult)
             console.log("source deletion is done")
         } else { console.log("delete source api does not work")}
-        // console.timeEnd('api call during time')
+        console.timeEnd('source api call during time')
         if (delSource != true){
             return sourceId
         }

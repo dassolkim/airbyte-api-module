@@ -36,5 +36,16 @@ async function testSource(delSource){
     }
 }
 
-var delSource = true
-testSource(delSource)
+/* 
+var testSourceId = "28ee4fe1-8cec-4a33-822b-83cbda871ec0"
+async function test_get(sourceId){
+    var result = await sourceLogic.getSource(sourceId)
+    console.log("test Result: ", result)
+    if(result != null){
+        console.log("It's complete")
+    }
+}
+test_get(testSourceId)
+*/
+
+testSource(true)

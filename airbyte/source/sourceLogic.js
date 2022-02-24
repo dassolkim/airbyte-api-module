@@ -1,27 +1,35 @@
-const rp = require('request-promise-native')
-const request = require('request');
-const res = require('express/lib/response');
+const axios = require('axios').default
 const configInfo = require('../../config/connectConfig')
 
+/* 
+const rp = require('request-promise-native')
+const request = require('request')
+const res = require('express/lib/response')
+*/
+
 // shared api
-// module.exports = discoverLogic
 module.exports = {discoverLogic, createSource, getSource, discoverSchema, deleteSource}
 
 function createSource() {
     var url = configInfo.defaultUrl + "sources/create"
     var connectionConfiguration = configInfo.connectSource
     var sourceName = "nodeCreateSource1"
-    const options = {
-        uri: url,
-        method: 'POST',
-        json: true,
-        body: {
-            workspaceId: configInfo.workspaceId,
-            sourceDefinitionId: configInfo.sourceDefinitionId,
-            connectionConfiguration: connectionConfiguration,
-            name: sourceName
-        },
-    };
+    const body = {
+        workspaceId: configInfo.workspaceId,
+        sourceDefinitionId: configInfo.sourceDefinitionId,
+        connectionConfiguration: connectionConfiguration,
+        name: sourceName
+    }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /* request and request-promise-naive are deprecated.
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -30,39 +38,39 @@ function createSource() {
             return result;
         }
     })
+    */
 }
 
 function getSource(sourceId){
     var url = configInfo.defaultUrl + "sources/get"
-    const options = {
-        uri: url,
-        method: 'POST',
-        body: {
-            sourceId: sourceId
-        },
-        json: true
+    const body = {
+        sourceId: sourceId
     };
-    return rp(options, function (error, respose, body) {
-        if (error) {
-            console.log(error);
-        } else {
-            var result = body;
-            return result;
-        }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+
+    }).catch(function (error){
+        console.log(error)
     })
+    return result
 }
 
 function discoverSchema(sourceId) {
     var url = configInfo.defaultUrl + "sources/discover_schema"
-    var sourceId = sourceId
-    const options = {
-        uri: url,
-        method: 'POST',
-        body: {
-            sourceId: sourceId
-        },
-        json: true
-    };
+    const body = {
+        sourceId: sourceId
+    }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /* request and request-promise-naive are deprecated.
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -71,19 +79,24 @@ function discoverSchema(sourceId) {
             return result;
         }
     })
+    */
 }
 
 function deleteSource(sourceId) {
     var url = configInfo.defaultUrl + "sources/delete"
-    var sourceId = sourceId
-    const options = {
-        uri: url,
-        method: 'POST',
-        body: {
-            sourceId: sourceId
-        },
-        json: true
-    };
+    // var sourceId = sourceId
+    const body = {
+        sourceId: sourceId
+    }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /* request and request-promise-naive are deprecated.
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -92,6 +105,7 @@ function deleteSource(sourceId) {
             return result;
         }
     })
+    */
 }
 
 async function discoverLogic(delSource) {
@@ -106,7 +120,7 @@ async function discoverLogic(delSource) {
             console.log(getSourceResult)
             console.log("source lookup is done")
         } else { console.log("get source api does not work")}
-        if (getSourceResult != null){
+        if (sourceId != null){
             var discoverResult = await discoverSchema(sourceId)
             var catalog = discoverResult.catalog
             console.log(JSON.stringify(catalog, null, 2))
@@ -129,3 +143,5 @@ async function discoverLogic(delSource) {
     }
     // console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
 }
+
+// discoverLogic(true)

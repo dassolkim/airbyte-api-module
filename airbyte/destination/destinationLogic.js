@@ -1,5 +1,7 @@
-const rp = require('request-promise-native')
+const axios = require('axios').default
 const configInfo = require('../../config/connectConfig')
+
+// const rp = require('request-promise-native')
 
 module.exports = {destinationLogic, createDestination, getDestination, deleteDestination}
 
@@ -7,17 +9,21 @@ function createDestination() {
     var url = configInfo.defaultUrl + "destinations/create"
     var connectionConfiguration = configInfo.connectDestination
     var destinationName = "nodeCreateDestination1"
-    const options = {
-        uri: url,
-        method: 'POST',
-        json: true,
-        body: {
-            workspaceId: configInfo.workspaceId,
-            destinationDefinitionId: configInfo.destinationDefinitionId,
-            connectionConfiguration: connectionConfiguration,
-            name: destinationName
-        },
-    };
+    const body = {
+        workspaceId: configInfo.workspaceId,
+        destinationDefinitionId: configInfo.destinationDefinitionId,
+        connectionConfiguration: connectionConfiguration,
+        name: destinationName
+    }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /*
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -26,18 +32,23 @@ function createDestination() {
             return result;
         }
     })
+    */
 }
 
 function getDestination(destinationId){
     var url = configInfo.defaultUrl + "destinations/get"
-    const options = {
-        uri: url,
-        method: 'POST',
-        body: {
-            destinationId: destinationId
-        },
-        json: true
+    const body = {
+        destinationId: destinationId
     };
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /*
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -46,18 +57,23 @@ function getDestination(destinationId){
             return result;
         }
     })
+    */
 }
 
 function deleteDestination(destinationId) {
     var url = configInfo.defaultUrl + "destinations/delete"
-    const options = {
-        uri: url,
-        method: 'POST',
-        body: {
-            destinationId: destinationId
-        },
-        json: true
-    };
+    const body = {
+        destinationId: destinationId
+    }
+    var result = axios.post(url, body)
+    .then(function (response){
+        var data = response.data
+        return data
+    }).catch(function (error){
+        console.log(error)
+    })
+    return result
+    /*
     return rp(options, function (error, respose, body) {
         if (error) {
             console.log(error);
@@ -66,6 +82,7 @@ function deleteDestination(destinationId) {
             return result;
         }
     })
+    */
 }
 
 async function destinationLogic(delDestination) {
@@ -95,3 +112,4 @@ async function destinationLogic(delDestination) {
         console.log(error)
     }
 }
+// destinationLogic(true)

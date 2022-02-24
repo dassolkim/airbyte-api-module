@@ -29,7 +29,6 @@ async function testDestination(delDestination) {
         console.log(error)
     }
 }
-
-var delDestination = true
-testDestination(delDestination)
+// var delDestination = true
+testDestination(true)
 

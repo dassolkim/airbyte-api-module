@@ -8,7 +8,7 @@ module.exports = {destinationLogic, createDestination, getDestination, deleteDes
 function createDestination() {
     var url = configInfo.defaultUrl + "destinations/create"
     var connectionConfiguration = configInfo.connectDestination
-    var destinationName = "nodeCreateDestination1"
+    var destinationName = "api_destination"
     const body = {
         workspaceId: configInfo.workspaceId,
         destinationDefinitionId: configInfo.destinationDefinitionId,

@@ -1,4 +1,3 @@
-const { del } = require('request')
 const destinationLogic = require('./destinationLogic')
 
 async function testDestination(delDestination) {

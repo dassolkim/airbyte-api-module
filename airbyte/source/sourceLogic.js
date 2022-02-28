@@ -8,12 +8,12 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = {discoverLogic, createSource, getSource, discoverSchema, deleteSource}
+module.exports = {discoverLogic, createSource, getSource, discoverSchema, deleteSource, createLogic}
 
-function createSource() {
+function createSource(connectConfig) {
     var url = configInfo.defaultUrl + "sources/create"
-    var connectionConfiguration = configInfo.connectSource
-    var sourceName = "nodeCreateSource1"
+    var connectionConfiguration = connectConfig
+    var sourceName = "api_source"
     const body = {
         workspaceId: configInfo.workspaceId,
         sourceDefinitionId: configInfo.sourceDefinitionId,
@@ -111,7 +111,7 @@ function deleteSource(sourceId) {
 async function discoverLogic(delSource) {
     try{
         console.time('source api call during time')
-        var source = await createSource()
+        var source = await createSource(configInfo.connectSource)
         console.log(source)
         if (source != null){
             var sourceId = source.sourceId
@@ -144,4 +144,29 @@ async function discoverLogic(delSource) {
     // console.log("extract catalog: ", JSON.stringify(catalog, null, 2))
 }
 
+async function createLogic() {
+    try{
+        console.time('source api call during time')
+        var source = await createSource(configInfo.connectSource)
+        var sourceId = source.sourceId
+        // console.log(sourceId)
+        if (sourceId != null){
+            var discoverResult = await discoverSchema(sourceId)
+            var catalog = discoverResult.catalog
+            // console.log(JSON.stringify(catalog, null, 2))
+            // console.log("source validation is done")
+        } else { console.log("discover_schema does not work")}
+        console.timeEnd('source api call during time')
+        // return sourceId
+        var results = {
+            sourceId: sourceId,
+            syncCatalog: catalog
+        }
+        // console.log("extract catalog: ", JSON.stringify(streams, null, 2))
+        return results
+    } catch (error) {
+        console.log(error)
+    }
+}
 // discoverLogic(true)
+// createLogic()

@@ -48,4 +48,35 @@ async function test_get(sourceId){
 test_get(testSourceId)
 */
 
-testSource(true)
+// var csvTestSourceId = "28ee4fe1-8cec-4a33-822b-83cbda871ec0"
+// var dbTestSourceId = "614e3799-a0b1-4018-9ab9-44b425b13153"
+/**
+var dbTestSourceId = "51c84494-c237-4238-81e2-b37912cb1f87"
+async function test_discover(sourceId){
+    var result = await sourceLogic.discoverSchema(sourceId)
+    var catalog = result.catalog
+    console.log("This is catalog: ", catalog)
+    if(result != null){
+        for (var obj in catalog){
+            for(var key in catalog[obj]){
+                for(var val in catalog[obj][key]){
+                    console.log(key, val)
+                    console.log(catalog[obj][key][val]) 
+                    // data.streams[key][stream] = catalog[obj][key][val]
+                    if(val == "stream"){
+                        data.streams[key][stream] = catalog[obj][key][val]
+                    } else if(val == "config"){
+                        data.streams[key][config] = catalog[obj][key][val]
+                    }
+                }
+            }
+        }
+        console.log("This is data: ", data)
+        console.log("It's complete")
+    }
+}
+**/
+
+// test_discover(dbTestSourceId)
+
+// testSource(true)

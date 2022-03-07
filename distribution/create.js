@@ -1,7 +1,7 @@
-const sourceLogic = require('./airbyte/source/sourceLogic')
-const destinationLogic = require('./airbyte/destination/destinationLogic')
-const connectionLogic = require('./airbyte/connection/connectionLogic')
-const configInfo = require('./config/connectConfig')
+const sourceLogic = require('../airbyte/source/sourceLogic')
+const destinationLogic = require('../airbyte/destination/destinationLogic')
+const connectionLogic = require('../airbyte/connection/connectionLogic')
+const configInfo = require('../config/connectConfig')
 const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+

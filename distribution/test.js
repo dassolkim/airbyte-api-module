@@ -24,29 +24,32 @@ async function main(){
         workspaceId: configInfo.workspaceId,
         destinationDefinitionId: configInfo.destinationDefinitionId,
         name: "create_test_destination"
-
-
     }
 
-    console.log("######### Validate Source #########")
-    var source = await validate.validateSource(sourceInfo)
-    if (source == true){
-        console.log("migration is possible")
-    }
+    // console.log("######### Validate Source #########")
+    // var source = await validate.validateSource(sourceInfo)
+    // if (source == true){
+    //     console.log("migration is possible")
+    // } else {
+    //     console.log("validateSource failed")
+    // }
 
-    console.log("######### Validate Destination #########")
-    var destination = await validate.validateDestination(destinationInfo)
-    if (destination == true){
-        console.log("validateDestination succeeded")
-    }
-    else {console.log("validateDestination failed")}
+    // console.log("######### Validate Destination #########")
+    // var destination = await validate.validateDestination(destinationInfo)
+    // if (destination == true){
+    //     console.log("validateDestination succeeded")
+    // }
+    // else {
+    //     console.log("validateDestination failed")
+    // }
     
     console.log("######### Create and Sync Connection #########")
     var connection = await create.create(sourceInfo, destinationInfo)
     if (connection == true){
-        console.log("createConnection and syncConnection succeeded")
+        console.log("distribution/create succeeded")
+    } else {
+        console.log("distribution/create failed")
     }
-
 }
 if (require.main == module){
     main()

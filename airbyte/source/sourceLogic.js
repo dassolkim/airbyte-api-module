@@ -1,5 +1,5 @@
 const axios = require('axios').default
-const configInfo = require('../../config/connectConfig')
+// const configInfo = require('../../config/connectConfig')
 
 /* 
 const rp = require('request-promise-native')
@@ -8,7 +8,7 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = {validateLogic, createSource, getSource, discoverSource, deleteSource, createLogic}
+module.exports = {validateLogic, createLogic}
 
 function createSource(sourceInfo) {
     var url = sourceInfo.defaultUrl + "sources/create"
@@ -28,16 +28,6 @@ function createSource(sourceInfo) {
         console.log(error)
     })
     return result
-    /* request and request-promise-naive are deprecated.
-    return rp(options, function (error, respose, body) {
-        if (error) {
-            console.log(error);
-        } else {
-            var result = body;
-            return result;
-        }
-    })
-    */
 }
 
 function getSource(defaultUrl, sourceId){
@@ -84,44 +74,39 @@ function deleteSource(defaultUrl, sourceId) {
         console.log(error)
     })
     return result
-    /* request and request-promise-naive are deprecated.
-    return rp(options, function (error, respose, body) {
-        if (error) {
-            console.log(error);
-        } else {
-            var result = body;
-            return result;
-        }
-    })
-    */
 }
 
 async function validateLogic(sourceInfo, delSource) {
     try{
-        console.time('validateLogic api call during time')
+        // console.time('validateLogic api call during time')
         var defaultUrl = sourceInfo.defaultUrl
         var source = await createSource(sourceInfo)
-        console.log(source)
-        if (source != null){
-            var sourceId = source.sourceId
+        var sourceId = source.sourceId
+        /** 
+         * getSource
+         * if (source != null){
             console.log("created sourceId: ", sourceId)
             var getSourceResult = await getSource(defaultUrl, sourceId)
             // console.log(getSourceResult)
             console.log("getSource succeeded")
         } else { console.log("getSource failed")}
+         */ 
         if (sourceId != null){
             var discoverResult = await discoverSource(defaultUrl, sourceId)
             var catalog = discoverResult.catalog
             // console.log(JSON.stringify(catalog, null, 2))
             console.log("discoverSource succeeded")
-        } else { console.log("discoverSource failed")}
+        } else { 
+            console.log("discoverSource failed")
+        }
         if (discoverResult != null && delSource == true){
             var deleteSourceResult = await deleteSource(defaultUrl, sourceId)
-            // console.log(deleteSourceResult)
+            console.log(deleteSourceResult)
             console.log("deleteSource succeeded")
-        } else { console.log("deleteSource failed")}
-        console.timeEnd('validateLogic api call during time')
-        
+        } else { 
+            console.log("deleteSource failed")
+        }
+        // console.timeEnd('validateLogic api call during time')
         if (delSource != true){
             return sourceId
         }
@@ -135,7 +120,7 @@ async function validateLogic(sourceInfo, delSource) {
 
 async function createLogic(sourceInfo) {
     try{
-        console.time('source api call during time')
+        // console.time('createLogic api call during time')
         var defaultUrl = sourceInfo.defaultUrl
         var source = await createSource(sourceInfo)
         var sourceId = source.sourceId
@@ -143,19 +128,17 @@ async function createLogic(sourceInfo) {
             var discoverResult = await discoverSource(defaultUrl, sourceId)
             var catalog = discoverResult.catalog
             // console.log(JSON.stringify(catalog, null, 2))
-            // console.log("source validation is done")
-        } else { console.log("discover_schema does not work")}
-        console.timeEnd('source api call during time')
-        // return sourceId
+        } else { 
+            console.log("discoverSource failed")
+            return null
+        }
+        // console.timeEnd('createLogic api call during time')
         var results = {
             sourceId: sourceId,
             syncCatalog: catalog
         }
-        // console.log("extract catalog: ", JSON.stringify(streams, null, 2))
         return results
     } catch (error) {
         console.log(error)
     }
 }
-// discoverLogic(true)
-// createLogic()

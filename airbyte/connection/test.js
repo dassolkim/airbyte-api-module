@@ -14,10 +14,8 @@ const data = {
 async function testConnection(){
     try{
         
-        var sourceCatalog = await sourceLogic.discoverSchema(data.sourceId)
+        var sourceCatalog = await sourceLogic.discoverSource(data.sourceId)
         var catalog = sourceCatalog.catalog
-        
-        // console.log(catalog)
         data.syncCatalog = catalog
         var connection = await connectionLogic.createConnection(data)
         if (connection != null){

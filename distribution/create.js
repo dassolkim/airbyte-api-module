@@ -2,39 +2,39 @@ const sourceLogic = require('../airbyte/source/sourceLogic')
 const destinationLogic = require('../airbyte/destination/destinationLogic')
 const connectionLogic = require('../airbyte/connection/connectionLogic')
 const configInfo = require('../config/connectConfig')
-const uuidv1 = require('uuid/v1')
+// const uuidv1 = require('uuid/v1')
 
-// get datasetId from SODAS+
+module.exports = {create}
 
-// const datasetId = uuidv1()
-// console.log("datasetId: ", datasetId)
-// const testCatalog = {}
-async function main(){
+async function create(sourceInfo, destinationInfo){
     
     var delDestination = false
-    
     console.log("Start sourceLogic")
-    var createLogicReturn = await sourceLogic.createLogic()
-    console.log("sourceLogic return: ", createLogicReturn)
+    var source = await sourceLogic.createLogic(sourceInfo)
+    console.log("sourceLogic return: ", source)
     
     console.log("Start destinationLogic")
-    var destinationLogicReturn = await destinationLogic.destinationLogic(delDestination)
-    console.log("destinationLogic return: ", destinationLogicReturn)
+    var destination = await destinationLogic.destinationLogic(destinationInfo, delDestination)
+    console.log("destinationLogic return: ", destination)
     
-    var data = createLogicReturn
-    data.destinationId = destinationLogicReturn
+    var data = source
+    data.destinationId = destination
     data.status = configInfo.status
     data.operationIds = [configInfo.operationId]
     var sync = true
-    // console.log("This is connectionCreate input data: ", data)
-    // console.log(data)
-    console.log("start connectionLogic")
+    console.log("start connection logic (create and sync)")
     var connectionLogicReturn = await connectionLogic.connectionLogic(data, sync)
-    console.log("Connection Logic Return:  ", connectionLogicReturn)
+    if (connectionLogicReturn == true){
+        console.log("create and sync conneciton succeeded")
+    }
     
-    
-}
-if (require.main == module){
-    main()
-    // console.log(testCatalog)
+    // if (sync != true) {
+    //     var connectionId = connectionLogicReturn
+    //     console.log("connection create only, created connectionId: ", connectionId)
+    // } else if (sync == true && connectionLogicReturn == true){
+    //     console.log("connection create and sync succeeded")
+    // } else {
+    //     console.log("connection sync failed")
+    // }
+
 }

@@ -5,15 +5,13 @@ const configInfo = require('../../config/connectConfig')
 
 module.exports = {destinationLogic, createDestination, getDestination, deleteDestination}
 
-function createDestination() {
-    var url = configInfo.defaultUrl + "destinations/create"
-    var connectionConfiguration = configInfo.connectDestination
-    var destinationName = "api_destination"
+function createDestination(destinationInfo) {
+    var url = destinationInfo.defaultUrl + "destinations/create"
     const body = {
-        workspaceId: configInfo.workspaceId,
-        destinationDefinitionId: configInfo.destinationDefinitionId,
-        connectionConfiguration: connectionConfiguration,
-        name: destinationName
+        workspaceId: destinationInfo.workspaceId,
+        destinationDefinitionId: destinationInfo.destinationDefinitionId,
+        connectionConfiguration: destinationInfo.connectionConfiguration,
+        name: destinationInfo.name
     }
     var result = axios.post(url, body)
     .then(function (response){
@@ -35,8 +33,8 @@ function createDestination() {
     */
 }
 
-function getDestination(destinationId){
-    var url = configInfo.defaultUrl + "destinations/get"
+function getDestination(defaultUrl, destinationId){
+    var url = defaultUrl + "destinations/get"
     const body = {
         destinationId: destinationId
     };
@@ -60,8 +58,8 @@ function getDestination(destinationId){
     */
 }
 
-function deleteDestination(destinationId) {
-    var url = configInfo.defaultUrl + "destinations/delete"
+function deleteDestination(defaultUrl, destinationId) {
+    var url = defaultUrl + "destinations/delete"
     const body = {
         destinationId: destinationId
     }
@@ -85,19 +83,50 @@ function deleteDestination(destinationId) {
     */
 }
 
-async function destinationLogic(delDestination) {
+async function destinationLogic(destinationInfo, delDestination) {
     try{
         console.time('distribution api call during time')
-        var destination = await createDestination()
+        var defaultUrl = destinationInfo.defaultUrl
+        var destination = await createDestination(destinationInfo)
+        var destinationId = destination.destinationId
+        console.log("created destinationId: ", destinationId)
+        if (destinationId != null){
+            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            console.log(getDestinationResult)
+            console.log("getDestination succeeded")
+        } else { console.log("get destination api does not work")}
+        if (destinationId != null && delDestination == true){    
+            var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
+            console.log(deleteDestinationResult)
+            console.log("deleteDestination succeeded")
+        } else { console.log("deleteDestination failed")}
+        console.timeEnd('distribution api call during time')
+        if (delDestination != true) {
+            return destinationId
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+/** 
+async function testDestinationLogic(destinationInfo, delDestination) {
+    try{
+        console.time('distribution api call during time')
+        var defaultUrl = destinationInfo.defaultUrl
+        var destination = await createDestination(destinationInfo)
         if (destination != null){
             var destinationId = destination.destinationId
             console.log("destinationId: ", destinationId)
-            var getDestinationResult = await getDestination(destinationId)
+            var getDestinationResult = await getDestination(defaultUrl, destinationId)
             console.log(getDestinationResult)
             console.log("destination lookup is done")
         } else { console.log("get destination api does not work")}
         if (getDestinationResult != null && delDestination == true){    
-            var deleteDestinationResult = await deleteDestination(destinationId)
+            var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
             console.log(deleteDestinationResult)
             console.log("destination deletion is done")
         } else { console.log("delete destination api does not work")}
@@ -112,4 +141,5 @@ async function destinationLogic(delDestination) {
         console.log(error)
     }
 }
-// destinationLogic(true)
+destinationLogic(true)
+*/

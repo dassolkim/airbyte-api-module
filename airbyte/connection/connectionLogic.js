@@ -33,7 +33,23 @@ function connectionSync(defaultUrl, connectionId) {
         return null
     })
     return result
+}
 
+function getConnection(defaultUrl, connectionId) {
+    var url = defaultUrl + "connections/get"
+    var data = {
+        connectionId: connectionId
+    }
+    var result = axios.post(url, data)
+    .then(function (response){
+        var data = response.data
+        return data
+
+    }).catch(function (error){
+        console.log(error)
+        return null
+    })
+    return result
 }
 
 function fetchConnection(connectionId){
@@ -55,26 +71,28 @@ function fetchConnection(connectionId){
 async function createLogic(url, data, sync){
     try{
         var defaultUrl = url
-        // console.time('connectionLogic api call during time')
-        
         var connection = await createConnection(defaultUrl, data)
         var connectionId = connection.connectionId
-        if (connectionId != null && sync == true){
+        var getConnectionResult = await getConnection(defaultUrl, connectionId)
+        if (getConnectionResult.connectionId == connectionId){
+            console.log("getConnection succeeded")
+        } else {
+            console.log("getConnection failed")
+        }
+        // console.log(connection)
+        console.log('createConnection succeeded')
+        if (getConnectionResult.connectionId != null && sync == true){
             var syncResult = await connectionSync(defaultUrl, connectionId)
             if (syncResult != null){
-                console.log('connection sync succeeded')
                 console.log(syncResult)
+                console.log('syncConnection succeeded')
                 return true
             } else {
-                console.log("connectionLogic failed")
+                console.log("syncConnection failed")
                 return false
             }
-            // console.log(connection)
         }
-        // console.timeEnd('connectionLogic api call during time')
-        // return connectionId
     } catch (error) {
-        console.log('connectionLogic failed')
         console.log(error.response)
     }   
 }

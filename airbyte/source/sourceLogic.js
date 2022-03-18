@@ -78,40 +78,40 @@ function deleteSource(defaultUrl, sourceId) {
 
 async function validateLogic(sourceInfo, delSource) {
     try{
-        // console.time('validateLogic api call during time')
         var defaultUrl = sourceInfo.defaultUrl
         var source = await createSource(sourceInfo)
         var sourceId = source.sourceId
-        /** 
-         * getSource
-         * if (source != null){
+        if (source != null){
             console.log("created sourceId: ", sourceId)
             var getSourceResult = await getSource(defaultUrl, sourceId)
             // console.log(getSourceResult)
-            console.log("getSource succeeded")
-        } else { console.log("getSource failed")}
-         */ 
-        if (sourceId != null){
-            var discoverResult = await discoverSource(defaultUrl, sourceId)
-            var catalog = discoverResult.catalog
-            // console.log(JSON.stringify(catalog, null, 2))
-            console.log("discoverSource succeeded")
-        } else { 
-            console.log("discoverSource failed")
-        }
-        if (discoverResult != null && delSource == true){
-            var deleteSourceResult = await deleteSource(defaultUrl, sourceId)
-            console.log(deleteSourceResult)
-            console.log("deleteSource succeeded")
-        } else { 
-            console.log("deleteSource failed")
-        }
-        // console.timeEnd('validateLogic api call during time')
-        if (delSource != true){
-            return sourceId
-        }
-        else {
-            return true
+            if (getSourceResult.sourceId == sourceId){
+                console.log("getSource succeeded")
+                var discoverResult = await discoverSource(defaultUrl, sourceId)
+                var catalog = discoverResult.catalog
+                // console.log(JSON.stringify(catalog, null, 2))
+                if (catalog != null){
+                    console.log("discoverSource succeeded")
+                } else {
+                    console.log("discoverSource failed")
+                }
+                if (delSource == true){
+                    var deleteSourceResult = await deleteSource(defaultUrl, sourceId)
+                    // console.log(deleteSourceResult)
+                    console.log("deleteSource succeeded")
+                } else {
+                    console.log("deleteSource failed")
+                }
+            } else {
+                console.log("getSource failed")
+            }
+        } else {
+            console.log("createSource failed")
+        }       
+        if (catalog != null && delSource == true){
+            return true           
+        }else{
+            return false
         }
     } catch (error) {
         console.log(error)
@@ -120,19 +120,20 @@ async function validateLogic(sourceInfo, delSource) {
 
 async function createLogic(sourceInfo) {
     try{
-        // console.time('createLogic api call during time')
         var defaultUrl = sourceInfo.defaultUrl
         var source = await createSource(sourceInfo)
         var sourceId = source.sourceId
-        if (sourceId != null){
+        console.log("created sourceId: ", sourceId)
+        var getSourceResult = await getSource(defaultUrl, sourceId)
+        if (getSourceResult.sourceId == sourceId){
             var discoverResult = await discoverSource(defaultUrl, sourceId)
             var catalog = discoverResult.catalog
+            console.log("discverSource succeeded")
             // console.log(JSON.stringify(catalog, null, 2))
         } else { 
             console.log("discoverSource failed")
             return null
         }
-        // console.timeEnd('createLogic api call during time')
         var results = {
             sourceId: sourceId,
             syncCatalog: catalog

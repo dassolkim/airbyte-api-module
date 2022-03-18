@@ -13,7 +13,7 @@ async function validateSource(sourceInfo){
     // console.log("source validateLogic return: ", sourceValidate)
     console.timeEnd("validateSource api call during time")
     if (sourceValidate == true) {
-        console.log("validation suceess")
+        // console.log("validation suceess")
         return true
     } else {
         return false
@@ -28,7 +28,7 @@ async function validateDestination(destinationInfo){
     // console.log("destinationLogic return: ", destinationValidate)
     console.timeEnd("validateDestination api call during time")
     if (destinationValidate == true){
-        console.log("validate distribution is successful")
+        // console.log("validate distribution is successful")
         return true
     } else {
         return false

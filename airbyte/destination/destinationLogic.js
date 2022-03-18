@@ -54,28 +54,31 @@ function deleteDestination(defaultUrl, destinationId) {
 
 async function validateLogic(destinationInfo, delDestination) {
     try{
-        // console.time("destination validateLogic api call during time")
         var defaultUrl = destinationInfo.defaultUrl
         var destination = await createDestination(destinationInfo)
         var destinationId = destination.destinationId
         console.log("created destinationId: ", destinationId)
         if (destinationId != null){
             var getDestinationResult = await getDestination(defaultUrl, destinationId)
-            console.log(getDestinationResult)
-            console.log("getDestination succeeded")
+            if (getDestinationResult.destinationId == destinationId){
+                console.log(getDestinationResult)
+                console.log("getDestination succeeded")       
+                if (delDestination == true){    
+                    var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
+                    console.log(deleteDestinationResult)
+                    console.log("deleteDestination succeeded")
+                } else {
+                    console.log("deleteDestination failed")
+            }
         } else {
-            console.log("get destination api does not work")
-        }
-        if (destinationId != null && delDestination == true){    
-            var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
-            // console.log(deleteDestinationResult)
-            console.log("deleteDestination succeeded")
-        } else {
-            console.log("deleteDestination failed")
-        }
-        // console.timeEnd("destination validateLogic api call during time")
+            console.log("createDestination failed")
+        }    
+    }
+    if (getDestinationResult.destinationId != null && delDestination == true){
         return true
-
+    } else {
+        return false
+    }
     } catch (error) {
         console.log(error)
     }
@@ -83,18 +86,20 @@ async function validateLogic(destinationInfo, delDestination) {
 
 async function createLogic(destinationInfo) {
     try{
-        // console.time("distribution createLogic api call during time")
+        var defaultUrl = destinationInfo.defaultUrl
         var destination = await createDestination(destinationInfo)
         var destinationId = destination.destinationId
         if (destinationId != null){
-            console.log("created destinationId: ", destinationId)
-            console.log("createDestination succeeded")
+            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            if (getDestinationResult.destinationId == destinationId){
+                console.log("created destinationId: ", destinationId)
+                console.log("createDestination succeeded")
+            }
             return destinationId
         } else { 
             console.log("createDestination failed")
             return null
         }
-        // console.timeEnd("distribution api call during time")
     } catch (error) {
         console.log(error)
     }

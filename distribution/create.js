@@ -7,7 +7,6 @@ const connectionLogic = require('../airbyte/connection/connectionLogic')
 module.exports = {create}
 
 async function create(sourceInfo, destinationInfo, connectionInfo){
-    var delDestination = false
     // console.log("Start sourceLogic")
     console.time("distribution/create api call during time")
     var source = await sourceLogic.createLogic(sourceInfo)

@@ -3,6 +3,7 @@
 const configInfo = require('../config/connectConfig')
 const validate = require('./validate')
 const create = require('./create')
+const remove = require('./remove')
 // const uuidv1 = require('uuid/v1')
 
 // get datasetId from SODAS+
@@ -31,7 +32,10 @@ async function main(){
         operationId: configInfo.operationId,
         sync: true
     }
-
+    var removeDestination = "f9115d2b-6ec3-428c-a815-40b9b785b680"
+    /**
+     * distribution/validate test (source, destination)
+     */
     // console.log("######### Validate Source #########")
     // var source = await validate.validateSource(sourceInfo)
     // if (source == true){
@@ -48,14 +52,33 @@ async function main(){
     // else {
     //     console.log("validateDestination failed")
     // }
-    
-    console.log("######### Create and Sync Connection #########")
-    var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
+
+    /**
+     * dstribution/create test
+     */
+    // console.log("######### Create and Sync Connection #########")
+    // var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
+    // if (connection == true){
+    //     console.log("distribution/create succeeded")
+    // } else {
+    //     console.log("distribution/create failed")
+    // }
+
+    /**
+     * distribution/remove test
+     * remove two lines: delDestination and removeDestination
+     */
+    var delDestination = false
+    var removeDestination = await validate.validateDestination(destinationInfo, delDestination)
+    console.log("######### Remove Destination #########")
+    var connection = await remove.remove(destinationInfo, removeDestination)
     if (connection == true){
-        console.log("distribution/create succeeded")
+        console.log("distribution/remove succeeded")
     } else {
-        console.log("distribution/create failed")
+        console.log("distribution/remove failed")
     }
+
+
 }
 if (require.main == module){
     main()

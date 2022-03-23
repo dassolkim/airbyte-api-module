@@ -20,8 +20,8 @@ async function validateSource(sourceInfo){
     }
 }
 
-async function validateDestination(destinationInfo){
-    var delDestination = true
+async function validateDestination(destinationInfo, delDestination){
+    // var delDestination = true
     console.log("Start validateDestination")
     console.time("validateDestination api call during time")
     var destinationValidate = await destinationLogic.validateLogic(destinationInfo, delDestination)
@@ -31,6 +31,6 @@ async function validateDestination(destinationInfo){
         // console.log("validate distribution is successful")
         return true
     } else {
-        return false
+        return destinationValidate
     }
 }

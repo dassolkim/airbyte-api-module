@@ -2,7 +2,7 @@ const axios = require('axios').default
 // const configInfo = require('../../config/connectConfig')
 // const rp = require('request-promise-native')
 
-module.exports = {validateLogic, createLogic}
+module.exports = {validateLogic, createLogic, removeLogic}
 
 function createDestination(destinationInfo) {
     var url = destinationInfo.defaultUrl + "destinations/create"
@@ -77,7 +77,7 @@ async function validateLogic(destinationInfo, delDestination) {
     if (getDestinationResult.destinationId != null && delDestination == true){
         return true
     } else {
-        return false
+        return destinationId
     }
     } catch (error) {
         console.log(error)
@@ -100,6 +100,27 @@ async function createLogic(destinationInfo) {
             console.log("createDestination failed")
             return null
         }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function removeLogic(destinationInfo, destinationId) {
+    try{
+        var defaultUrl = destinationInfo.defaultUrl
+        if (destinationId != null){
+            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            if (getDestinationResult.destinationId == destinationId){
+                console.log("removed destinationId: ", destinationId)
+                console.log("getDestination succeeded")
+            }
+            var delDestinationResult = await deleteDestination(defaultUrl, destinationId)
+            console.log("deleteDestination succeeded")
+            return true
+        } else { 
+            console.log("getDestination failed")
+        }
+        return false
     } catch (error) {
         console.log(error)
     }

@@ -45,7 +45,8 @@ function deleteDestination(defaultUrl, destinationId) {
     var result = axios.post(url, body)
     .then(function (response){
         var data = response.data
-        return data
+        console.log("deleteDestination result: ", data)
+        return true
     }).catch(function (error){
         console.log(error)
     })
@@ -57,24 +58,30 @@ async function validateLogic(destinationInfo, delDestination) {
         var defaultUrl = destinationInfo.defaultUrl
         var destination = await createDestination(destinationInfo)
         var destinationId = destination.destinationId
+        var check
         console.log("created destinationId: ", destinationId)
         if (destinationId != null){
             var getDestinationResult = await getDestination(defaultUrl, destinationId)
             if (getDestinationResult.destinationId == destinationId){
+                check = true
                 console.log(getDestinationResult)
                 console.log("getDestination succeeded")       
                 if (delDestination == true){    
                     var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
-                    console.log(deleteDestinationResult)
-                    console.log("deleteDestination succeeded")
+                    if (deleteDestinationResult == true){
+                        console.log("deleteDestination succeeded")
+                    } else {
+                        console.log("deleteDestinatoin failed")
+                    }
                 } else {
-                    console.log("deleteDestination failed")
+                    console.log("do not delete destination")
             }
         } else {
+            check = false
             console.log("createDestination failed")
         }    
     }
-    if (getDestinationResult.destinationId != null && delDestination == true){
+    if (check == true && delDestination == true){
         return true
     } else {
         return destinationId
@@ -115,8 +122,12 @@ async function removeLogic(destinationInfo, destinationId) {
                 console.log("getDestination succeeded")
             }
             var delDestinationResult = await deleteDestination(defaultUrl, destinationId)
-            console.log("deleteDestination succeeded")
-            return true
+            if (delDestinationResult == true){
+                console.log("deleteDestination succeeded")
+                return true
+            } else {
+                console.log("deleteDestinatoin failed")
+            }
         } else { 
             console.log("getDestination failed")
         }

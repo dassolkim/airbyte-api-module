@@ -36,47 +36,47 @@ async function main(){
     /**
      * distribution/validate test (source)
      */
-    console.log("######### Validate #########")
-    var source = await validate.validate(sourceInfo)
-    if (source == true){
-        console.log("migration is possible")
-    } else {
-        console.log("validateSource failed")
-    }
+    // console.log("######### Validate #########")
+    // var source = await validate.validate(sourceInfo)
+    // if (source == true){
+    //     console.log("migration is possible, distribution/validate succedeed")
+    // } else {
+    //     console.log("distribution/validate failed")
+    // }
 
     /**
      * source and destination validate logic test
      */
-    console.log("######### Validate Source Using delete option #########")
-    var delSource = true
-    var source = await validate.validateSource(sourceInfo, delSource)
-    if (source == true){
-        console.log("validateSource succeeded")
-    }
-    else {
-        console.log("validateSource failed")
-    }
+    // console.log("######### Validate Source Using delete option #########")
+    // var delSource = true
+    // var source = await validate.validateSource(sourceInfo, delSource)
+    // if (source == true){
+    //     console.log("validateSource succeeded")
+    // }
+    // else {
+    //     console.log("validateSource failed")
+    // }
 
-    console.log("######### Validate Destination Using delete option #########")
-    var delDestination = true
-    var destination = await validate.validateDestination(destinationInfo, delDestination)
-    if (destination == true){
-        console.log("validateDestination succeeded")
-    }
-    else {
-        console.log("validateDestination failed")
-    }
+    // console.log("######### Validate Destination Using delete option #########")
+    // var delDestination = true
+    // var destination = await validate.validateDestination(destinationInfo, delDestination)
+    // if (destination == true){
+    //     console.log("validateDestination succeeded")
+    // }
+    // else {
+    //     console.log("validateDestination failed")
+    // }
 
     /**
      * dstribution/create test
      */
-    console.log("######### Create and Sync Connection #########")
-    var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
-    if (connection == true){
-        console.log("distribution/create succeeded")
-    } else {
-        console.log("distribution/create failed")
-    }
+    // console.log("######### Create and Sync Connection #########")
+    // var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
+    // if (connection == true){
+    //     console.log("distribution/create succeeded")
+    // } else {
+    //     console.log("distribution/create failed")
+    // }
 
     /**
      * distribution/remove test
@@ -84,8 +84,10 @@ async function main(){
      */
     var delDestination = false
     var removeDestination = await validate.validateDestination(destinationInfo, delDestination)
-    console.log("######### Remove Destination #########")
-    var connection = await remove.remove(destinationInfo, removeDestination)
+    var delSource = false
+    var removeSource = await validate.validateSource(sourceInfo, delSource)
+    console.log("######### Remove #########")
+    var connection = await remove.remove(sourceInfo, removeSource, destinationInfo, removeDestination)
     if (connection == true){
         console.log("distribution/remove succeeded")
     } else {

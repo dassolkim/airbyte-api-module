@@ -8,7 +8,7 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = {validateLogic, createLogic}
+module.exports = {validateLogic, createLogic, removeLogic}
 
 function createSource(sourceInfo) {
     var url = sourceInfo.defaultUrl + "sources/create"
@@ -69,7 +69,8 @@ function deleteSource(defaultUrl, sourceId) {
     var result = axios.post(url, body)
     .then(function (response){
         var data = response.data
-        return data
+        console.log("deleteSource result: ", data)
+        return true
     }).catch(function (error){
         console.log(error)
     })
@@ -98,9 +99,13 @@ async function validateLogic(sourceInfo, delSource) {
                 if (delSource == true){
                     var deleteSourceResult = await deleteSource(defaultUrl, sourceId)
                     // console.log(deleteSourceResult)
-                    console.log("deleteSource succeeded")
+                    if (deleteSourceResult == true){
+                        console.log("deleteSource succeeded")
+                    } else {
+                        console.log("deleteSource failed")
+                    }
                 } else {
-                    console.log("deleteSource failed")
+                    console.log("do not delete source")
                 }
             } else {
                 console.log("getSource failed")
@@ -139,6 +144,31 @@ async function createLogic(sourceInfo) {
             syncCatalog: catalog
         }
         return results
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function removeLogic(sourceInfo, sourceId) {
+    try{
+        var defaultUrl = sourceInfo.defaultUrl
+        if (sourceId != null){
+            var getSourceResult = await getSource(defaultUrl, sourceId)
+            if (getSourceResult.sourceId == sourceId){
+                console.log("removed sourceId: ", sourceId)
+                console.log("getSource succeeded")
+            }
+            var delSourceResult = await deleteSource(defaultUrl, sourceId)
+            if (delSourceResult == true){
+                console.log("deleteSource succeeded")
+                return true
+            } else {
+                console.log("deleteSource failed")
+            }
+        } else { 
+            console.log("getSource failed")
+        }
+        return false
     } catch (error) {
         console.log(error)
     }

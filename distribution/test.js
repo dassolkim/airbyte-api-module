@@ -32,37 +32,51 @@ async function main(){
         operationId: configInfo.operationId,
         sync: true
     }
-    var removeDestination = "f9115d2b-6ec3-428c-a815-40b9b785b680"
+    
     /**
-     * distribution/validate test (source, destination)
+     * distribution/validate test (source)
      */
-    // console.log("######### Validate Source #########")
-    // var source = await validate.validateSource(sourceInfo)
-    // if (source == true){
-    //     console.log("migration is possible")
-    // } else {
-    //     console.log("validateSource failed")
-    // }
+    console.log("######### Validate #########")
+    var source = await validate.validate(sourceInfo)
+    if (source == true){
+        console.log("migration is possible")
+    } else {
+        console.log("validateSource failed")
+    }
 
-    // console.log("######### Validate Destination #########")
-    // var destination = await validate.validateDestination(destinationInfo)
-    // if (destination == true){
-    //     console.log("validateDestination succeeded")
-    // }
-    // else {
-    //     console.log("validateDestination failed")
-    // }
+    /**
+     * source and destination validate logic test
+     */
+    console.log("######### Validate Source Using delete option #########")
+    var delSource = true
+    var source = await validate.validateSource(sourceInfo, delSource)
+    if (source == true){
+        console.log("validateSource succeeded")
+    }
+    else {
+        console.log("validateSource failed")
+    }
+
+    console.log("######### Validate Destination Using delete option #########")
+    var delDestination = true
+    var destination = await validate.validateDestination(destinationInfo, delDestination)
+    if (destination == true){
+        console.log("validateDestination succeeded")
+    }
+    else {
+        console.log("validateDestination failed")
+    }
 
     /**
      * dstribution/create test
      */
-    // console.log("######### Create and Sync Connection #########")
-    // var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
-    // if (connection == true){
-    //     console.log("distribution/create succeeded")
-    // } else {
-    //     console.log("distribution/create failed")
-    // }
+    console.log("######### Create and Sync Connection #########")
+    var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
+    if (connection == true){
+        console.log("distribution/create succeeded")
+    } else {
+        console.log("distribution/create failed")
+    }
 
     /**
      * distribution/remove test
@@ -77,9 +91,8 @@ async function main(){
     } else {
         console.log("distribution/remove failed")
     }
-
-
 }
+
 if (require.main == module){
     main()
 }

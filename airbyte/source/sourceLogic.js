@@ -111,7 +111,7 @@ async function validateLogic(sourceInfo, delSource) {
         if (catalog != null && delSource == true){
             return true           
         }else{
-            return false
+            return sourceId
         }
     } catch (error) {
         console.log(error)

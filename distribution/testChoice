@@ -1,0 +1,47 @@
+const configInfo = require('../config/connectConfig')
+const choice = require('./choice')
+
+// get datasetId from SODAS+
+
+async function main(){
+    
+    var sourceInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        connectionConfiguration: configInfo.connectSource,
+        workspaceId: configInfo.workspaceId,
+        sourceDefinitionId: configInfo.sourceDefinitionId,
+        name: "choiceSource"
+    }
+    var destinationInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        connectionConfiguration: configInfo.connectDestination,
+        workspaceId: configInfo.workspaceId,
+        destinationDefinitionId: configInfo.destinationDefinitionId,
+        name: "choiceDestination"
+    }
+    var connectionInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        status: configInfo.status,
+        operationId: configInfo.operationId,
+        sync: true
+    }
+    
+    /**
+     * dstribution/create choice test
+     * destination: api_destination_3
+     */
+    console.log("######### Create and Sync Connection #########")
+    // var run = await choice.choiceLogic(sourceInfo, destinationInfo, connectionInfo)
+    var prepare = await choice.prepare(sourceInfo, destinationInfo)
+    // var choiceData = prepare.syncCatalog
+    var drop = ["new_custom_tables", "new"]
+    var cd = await choice.choice(prepare, drop)
+    var create = await choice.create(destinationInfo, connectionInfo, cd)
+    console.log(create)
+    console.log("test Choice end")
+
+}
+
+if (require.main == module){
+    main()
+}

@@ -1,6 +1,6 @@
-const sourceLogic = require('../airbyte/source/sourceLogic')
-const destinationLogic = require('../airbyte/destination/destinationLogic')
-const connectionLogic = require('../airbyte/connection/connectionLogic')
+const sourceLogic = require('../../airbyte/source/sourceLogic')
+const destinationLogic = require('../../airbyte/destination/destinationLogic')
+const connectionLogic = require('../../airbyte/connection/connectionLogic')
 
 module.exports = {prepare, choice, create}
 
@@ -11,35 +11,30 @@ async function prepare(sourceInfo){
     // console.log("sourceLogic return: ", source)
     if (source == null){
         console.log("source/createLogic failed")
-        return false
+        return null
     }
-    
-    // console.log(source)
     console.log("prepare returns: ", source)
-    console.log(JSON.stringify(source, null, 4))
+    console.log("Table list: ", JSON.stringify(source.syncCatalog, null, 2))
 
     return source
 }
 
 async function choice(data, drop){
 
-    // var connection = data
     var source = data
     var choiceData = source.syncCatalog
 
-    // get object count
     const count = Object.keys(choiceData.streams).length;
 
     console.log("Number of Tables: ", count)
-    console.log("drop tables list: ", drop)
+    console.log("drop table list: ", drop)
 
     var i = 0
     while(i<count){
         console.log(choiceData.streams[i].stream.name)
-        var temp = choiceData.streams[i]
-        if(drop.includes(temp.stream.name) == true){
-            // delete choiceData.streams[i]
+        if(drop.includes(choiceData.streams[i].stream.name) == true){
             choiceData.streams[i] = null
+            // delete choiceData.streams[i]
             // Object.keys(temp).forEach(function(key){
             //     delete temp[key];
             // })
@@ -56,9 +51,9 @@ async function choice(data, drop){
         streams: []
     }
     while(j<count){
-        var temp = choiceData.streams[j]
-        if(temp != null){
-            newData.streams[a] = temp
+        // var temp = choiceData.streams[j]
+        if(choiceData.streams[j] != null){
+            newData.streams[a] = choiceData.streams[j]
             a++
         }
         j++

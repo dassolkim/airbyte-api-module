@@ -1,5 +1,5 @@
-const sourceLogic = require('../airbyte/source/sourceLogic')
-const destinationLogic = require('../airbyte/destination/destinationLogic')
+const sourceLogic = require('../../airbyte/source/sourceLogic')
+const destinationLogic = require('../../airbyte/destination/destinationLogic')
 
 module.exports = {remove}
 

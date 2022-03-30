@@ -30,7 +30,7 @@ async function main(){
      * dstribution/create choice test
      * destination: api_destination_3
      */
-    console.log("######### Create and Sync Connection with choice tables #########")
+    console.log("######### Postgres to Postgres Migration Test with table selection #########")
 
     // Airybte source create -> get -> discover
     var prepare = await choice.prepare(sourceInfo, destinationInfo)

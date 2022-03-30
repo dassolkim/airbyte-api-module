@@ -21,6 +21,13 @@ async function main(){
         destinationDefinitionId: configInfo.destinationDefinitionId,
         name: "create_test_destination"
     }
+    var csvSourceInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        connectionConfiguration: configInfo.csvConnectSource,
+        workspaceId: configInfo.workspaceId,
+        sourceDefinitionId: configInfo.csvSourceDefinitnionId,
+        name: "create_test_csv_source"
+    }
     var connectionInfo = {
         defaultUrl: configInfo.defaultUrl,
         status: configInfo.status,
@@ -31,8 +38,8 @@ async function main(){
     /**
      * dstribution/create test
      */
-    console.log("######### Create and Sync Connection #########")
-    var connection = await create.create(sourceInfo, destinationInfo, connectionInfo)
+    console.log("######### CSV File to Postgres Migration Test #########")
+    var connection = await create.create(csvSourceInfo, destinationInfo, connectionInfo)
     if (connection == true){
         console.log("distribution/create succeeded")
     } else {

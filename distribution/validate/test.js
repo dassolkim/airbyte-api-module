@@ -9,7 +9,14 @@ async function main(){
         connectionConfiguration: configInfo.connectSource,
         workspaceId: configInfo.workspaceId,
         sourceDefinitionId: configInfo.sourceDefinitionId,
-        name: "create_test_source"
+        name: "create_test_db_source"
+    }
+    var csvSourceInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        connectionConfiguration: configInfo.csvConnectSource,
+        workspaceId: configInfo.workspaceId,
+        sourceDefinitionId: configInfo.csvSourceDefinitnionId,
+        name: "create_test_csv_source"
     }
     var destinationInfo = {
         defaultUrl: configInfo.defaultUrl,
@@ -20,15 +27,27 @@ async function main(){
     }
 
     /**
-     * distribution/validate test (source)
+     * distribution/validate test (CSV source)
+     */
+    console.log("######### Validate #########")
+    var source = await validate.validate(csvSourceInfo)
+    if (source == true){
+        console.log("CSV file migration is possible, distribution/validate succedeed")
+    } else {
+        console.log("distribution/validate failed")
+    }
+
+    /**
+     * distribution/validate test (DB source)
      */
     console.log("######### Validate #########")
     var source = await validate.validate(sourceInfo)
     if (source == true){
-        console.log("migration is possible, distribution/validate succedeed")
+        console.log("DB migration is possible, distribution/validate succedeed")
     } else {
         console.log("distribution/validate failed")
     }
+ 
 
     /**
      * source and destination validate logic test

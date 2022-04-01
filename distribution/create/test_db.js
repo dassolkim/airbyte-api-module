@@ -1,25 +1,35 @@
 const configInfo = require('../../config/connectConfig')
-const choice = require('./choice')
+const validate = require('../validate/validate')
+const db = require('./db')
 
 // get datasetId from SODAS+
 
 async function main(){
     
-    var sourceInfo = {
+    const csvSourceInfo = {
+        defaultUrl: configInfo.defaultUrl,
+        connectionConfiguration: configInfo.csvConnectSource,
+        workspaceId: configInfo.workspaceId,
+        sourceDefinitionId: configInfo.csvSourceDefinitnionId,
+        sourceType: 'file',
+        name: "create_test_csv_source"
+    }
+    const sourceInfo = {
         defaultUrl: configInfo.defaultUrl,
         connectionConfiguration: configInfo.connectSource,
         workspaceId: configInfo.workspaceId,
         sourceDefinitionId: configInfo.sourceDefinitionId,
-        name: "choiceSource1"
+        sourceType: 'db',
+        name: 'choiceSource1'
     }
-    var destinationInfo = {
+    const destinationInfo = {
         defaultUrl: configInfo.defaultUrl,
         connectionConfiguration: configInfo.connectDestination,
         workspaceId: configInfo.workspaceId,
         destinationDefinitionId: configInfo.destinationDefinitionId,
-        name: "choiceDestination1"
+        name: 'choiceDestination1'
     }
-    var connectionInfo = {
+    const connectionInfo = {
         defaultUrl: configInfo.defaultUrl,
         status: configInfo.status,
         operationId: configInfo.operationId,
@@ -27,28 +37,28 @@ async function main(){
     }
     
     /**
-     * dstribution/create choice test
+     * dstribution/create db source test
      * destination: api_destination_3
      */
     console.log("######### Postgres to Postgres Migration Test with table selection #########")
 
     // Airybte source create -> get -> discover
-    var prepare = await choice.prepare(sourceInfo, destinationInfo)
+    const prepare = await db.prepare(sourceInfo, destinationInfo)
     if(prepare != null){
         // User select drop tables
-        var drop = ["covid_data", "_airbyte_raw_covid_data", "table1"]
-        var cd = await choice.choice(prepare, drop)
-        var create = await choice.create(destinationInfo, connectionInfo, cd)
+        const drop = ["covid_data", "_airbyte_raw_covid_data", "table1"]
+        const cd = await db.choice(prepare, drop)
+        const create = await db.create(destinationInfo, connectionInfo, cd)
         if(create == true){
             console.log(create)
-            console.log("choice.create succeeded")
+            console.log("db.create succeeded")
         } else{
-            console.log("choice.create failed")
+            console.log("db.create failed")
         }
     }else{
-        console.log("choice.prepare failed")
+        console.log("db.prepare failed")
     }
-    console.log("test Choice end")
+    console.log("test db source end")
 
 }
 

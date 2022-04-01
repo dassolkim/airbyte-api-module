@@ -4,14 +4,14 @@ const remove = require('./remove')
 
 async function main(){
     
-    var sourceInfo = {
+    const sourceInfo = {
         defaultUrl: configInfo.defaultUrl,
         connectionConfiguration: configInfo.connectSource,
         workspaceId: configInfo.workspaceId,
         sourceDefinitionId: configInfo.sourceDefinitionId,
         name: "remove_test_source"
     }
-    var destinationInfo = {
+    const destinationInfo = {
         defaultUrl: configInfo.defaultUrl,
         connectionConfiguration: configInfo.connectDestination,
         workspaceId: configInfo.workspaceId,
@@ -23,12 +23,12 @@ async function main(){
      * distribution/remove test
      * remove two lines: delDestination and removeDestination
      */
-    var delDestination = false
-    var removeDestination = await validate.validateDestination(destinationInfo, delDestination)
-    var delSource = false
-    var removeSource = await validate.validateSource(sourceInfo, delSource)
+    const delDestination = false
+    const removeDestination = await validate.validateDestination(destinationInfo, delDestination)
+    const delSource = false
+    const removeSource = await validate.validateSource(sourceInfo, delSource)
     console.log("######### Remove #########")
-    var connection = await remove.remove(sourceInfo, removeSource, destinationInfo, removeDestination)
+    const connection = await remove.remove(sourceInfo, removeSource, destinationInfo, removeDestination)
     if (connection == true){
         console.log("distribution/remove succeeded")
     } else {

@@ -7,7 +7,7 @@ module.exports = {prepare, choice, create}
 async function prepare(sourceInfo){
 
     // console.log("Start sourceLogic")
-    var source = await sourceLogic.createLogic(sourceInfo)
+    const source = await sourceLogic.createLogic(sourceInfo)
     // console.log("sourceLogic return: ", source)
     if (source == null){
         console.log("source/createLogic failed")
@@ -21,15 +21,15 @@ async function prepare(sourceInfo){
 
 async function choice(data, drop){
 
-    var source = data
-    var choiceData = source.syncCatalog
+    const source = data
+    const choiceData = source.syncCatalog
 
     const count = Object.keys(choiceData.streams).length;
 
     console.log("Number of Tables: ", count)
     console.log("drop table list: ", drop)
 
-    var i = 0
+    let i = 0
     while(i<count){
         console.log(choiceData.streams[i].stream.name)
         if(drop.includes(choiceData.streams[i].stream.name) == true){
@@ -45,9 +45,9 @@ async function choice(data, drop){
     /**
      * reassign object
      */
-    var j = 0
-    var a = 0
-    var newData = {
+    let j = 0
+    let a = 0
+    const newData = {
         streams: []
     }
     while(j<count){
@@ -67,7 +67,7 @@ async function choice(data, drop){
 async function create(destinationInfo, connectionInfo, data){
 
     console.log("Start destinationLogic in choice.create")
-    var destination = await destinationLogic.createLogic(destinationInfo)
+    const destination = await destinationLogic.createLogic(destinationInfo)
     // console.log("destinationLogic return: ", destination)
     if (destination == null){
         console.log("destination/createLogic failed")
@@ -75,14 +75,14 @@ async function create(destinationInfo, connectionInfo, data){
     }
     data.destinationId = destination
 
-    var connection = data
+    const connection = data
     connection.status = connectionInfo.status
     connection.operationIds = [connectionInfo.operationId]
-    var sync = connectionInfo.sync
-    var url = connectionInfo.defaultUrl
+    const sync = connectionInfo.sync
+    const url = connectionInfo.defaultUrl
     console.log("start connection logic (create and sync)")
     console.log("createConnection Input: ", connection)
-    var connectionLogicReturn = await connectionLogic.createLogic(url, connection, sync)
+    const connectionLogicReturn = await connectionLogic.createLogic(url, connection, sync)
     
     if (connectionLogicReturn == true){
         console.log("connection/createLogic succeeded")

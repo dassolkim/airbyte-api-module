@@ -9,19 +9,18 @@ const res = require('express/lib/response')
 
 // shared api
 module.exports = {validateLogic, createLogic, removeLogic}
-
+// module.exports = {createSource, getSource, discoverSource, deleteSource}
 function createSource(sourceInfo) {
-    var url = sourceInfo.defaultUrl + "sources/create"
-    // var sourceName = "api_source"
+    const url = sourceInfo.defaultUrl + "sources/create"
     const body = {
         workspaceId: sourceInfo.workspaceId,
         sourceDefinitionId: sourceInfo.sourceDefinitionId,
         connectionConfiguration: sourceInfo.connectionConfiguration,
         name: sourceInfo.name
     }
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -31,13 +30,13 @@ function createSource(sourceInfo) {
 }
 
 function getSource(defaultUrl, sourceId){
-    var url = defaultUrl + "sources/get"
+    const url = defaultUrl + "sources/get"
     const body = {
         sourceId: sourceId
     };
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -47,13 +46,13 @@ function getSource(defaultUrl, sourceId){
 }
 
 function discoverSource(defaultUrl, sourceId) {
-    var url = defaultUrl + "sources/discover_schema"
+    const url = defaultUrl + "sources/discover_schema"
     const body = {
         sourceId: sourceId
     }
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
     }).catch(function (error){
         console.log(error)
@@ -62,13 +61,13 @@ function discoverSource(defaultUrl, sourceId) {
 }
 
 function deleteSource(defaultUrl, sourceId) {
-    var url = defaultUrl + "sources/delete"
+    const url = defaultUrl + "sources/delete"
     const body = {
         sourceId: sourceId
     }
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         console.log("deleteSource result: ", data)
         return true
     }).catch(function (error){
@@ -79,17 +78,18 @@ function deleteSource(defaultUrl, sourceId) {
 
 async function validateLogic(sourceInfo, delSource) {
     try{
-        var defaultUrl = sourceInfo.defaultUrl
-        var source = await createSource(sourceInfo)
-        var sourceId = source.sourceId
+        const defaultUrl = sourceInfo.defaultUrl
+        const source = await createSource(sourceInfo)
+        const sourceId = source.sourceId
+        let catalog
         if (source != null){
             console.log("created sourceId: ", sourceId)
-            var getSourceResult = await getSource(defaultUrl, sourceId)
+            const getSourceResult = await getSource(defaultUrl, sourceId)
             // console.log(getSourceResult)
             if (getSourceResult.sourceId == sourceId){
                 console.log("getSource succeeded")
-                var discoverResult = await discoverSource(defaultUrl, sourceId)
-                var catalog = discoverResult.catalog
+                const discoverResult = await discoverSource(defaultUrl, sourceId)
+                catalog = discoverResult.catalog
                 // console.log(JSON.stringify(catalog, null, 2))
                 if (catalog != null){
                     console.log("discoverSource succeeded")
@@ -97,7 +97,7 @@ async function validateLogic(sourceInfo, delSource) {
                     console.log("discoverSource failed")
                 }
                 if (delSource == true){
-                    var deleteSourceResult = await deleteSource(defaultUrl, sourceId)
+                    const deleteSourceResult = await deleteSource(defaultUrl, sourceId)
                     // console.log(deleteSourceResult)
                     if (deleteSourceResult == true){
                         console.log("deleteSource succeeded")
@@ -114,9 +114,13 @@ async function validateLogic(sourceInfo, delSource) {
             console.log("createSource failed")
         }       
         if (catalog != null && delSource == true){
-            return true           
+            return catalog           
         }else{
-            return sourceId
+            const null_catalog = {
+                sourceId: sourceId,
+                stremas: null
+            }
+            return null_catalog
         }
     } catch (error) {
         console.log(error)
@@ -125,25 +129,27 @@ async function validateLogic(sourceInfo, delSource) {
 
 async function createLogic(sourceInfo) {
     try{
-        var defaultUrl = sourceInfo.defaultUrl
-        var source = await createSource(sourceInfo)
-        var sourceId = source.sourceId
+        const defaultUrl = sourceInfo.defaultUrl
+        const source = await createSource(sourceInfo)
+        const sourceId = source.sourceId
         console.log("created sourceId: ", sourceId)
-        var getSourceResult = await getSource(defaultUrl, sourceId)
+        // let catalog
+        const getSourceResult = await getSource(defaultUrl, sourceId)
         if (getSourceResult.sourceId == sourceId){
-            var discoverResult = await discoverSource(defaultUrl, sourceId)
-            var catalog = discoverResult.catalog
+            // const discoverResult = await discoverSource(defaultUrl, sourceId)
+            // catalog = discoverResult.catalog
             console.log("discverSource succeeded")
             // console.log(JSON.stringify(catalog, null, 2))
         } else { 
             console.log("discoverSource failed")
             return null
         }
-        var results = {
-            sourceId: sourceId,
-            syncCatalog: catalog
-        }
-        return results
+        // const results = {
+        //     sourceId: sourceId,
+        //     syncCatalog: catalog
+        // }
+        // return results
+        return sourceId
     } catch (error) {
         console.log(error)
     }
@@ -151,14 +157,14 @@ async function createLogic(sourceInfo) {
 
 async function removeLogic(sourceInfo, sourceId) {
     try{
-        var defaultUrl = sourceInfo.defaultUrl
+        const defaultUrl = sourceInfo.defaultUrl
         if (sourceId != null){
-            var getSourceResult = await getSource(defaultUrl, sourceId)
+            const getSourceResult = await getSource(defaultUrl, sourceId)
             if (getSourceResult.sourceId == sourceId){
                 console.log("removed sourceId: ", sourceId)
                 console.log("getSource succeeded")
             }
-            var delSourceResult = await deleteSource(defaultUrl, sourceId)
+            const delSourceResult = await deleteSource(defaultUrl, sourceId)
             if (delSourceResult == true){
                 console.log("deleteSource succeeded")
                 return true

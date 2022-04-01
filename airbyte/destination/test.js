@@ -4,11 +4,11 @@ async function testDestination(delDestination) {
     
     try{
         console.time('api call during time')
-        var destination = await destinationLogic.createDestination()
+        const destination = await destinationLogic.createDestination()
         if (destination != null){
-            var destinationId = destination.destinationId
+            const destinationId = destination.destinationId
             console.log("destinationId: ", destinationId)
-            var getDestinationResult = await destinationLogic.getDestination(destinationId)
+            const getDestinationResult = await destinationLogic.getDestination(destinationId)
             console.log(getDestinationResult)
             console.log("destination lookup is done")
         } else { console.log("get destination api does not work")}

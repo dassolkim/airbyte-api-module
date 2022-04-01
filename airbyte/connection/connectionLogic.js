@@ -6,10 +6,10 @@ const axios = require('axios').default
 module.exports = {createLogic, connectionSync}
 
 function createConnection(defaultUrl, data) {
-    var url = defaultUrl + "connections/create"
-    var result = axios.post(url, data)
+    const url = defaultUrl + "connections/create"
+    const result = axios.post(url, data)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -19,13 +19,13 @@ function createConnection(defaultUrl, data) {
 }
 
 function connectionSync(defaultUrl, connectionId) {
-    var url = defaultUrl + "connections/sync"
-    var data = {
+    const url = defaultUrl + "connections/sync"
+    const data = {
         connectionId: connectionId
     }
-    var result = axios.post(url, data)
+    const result = axios.post(url, data)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -36,13 +36,13 @@ function connectionSync(defaultUrl, connectionId) {
 }
 
 function getConnection(defaultUrl, connectionId) {
-    var url = defaultUrl + "connections/get"
-    var data = {
+    const url = defaultUrl + "connections/get"
+    const data = {
         connectionId: connectionId
     }
-    var result = axios.post(url, data)
+    const result = axios.post(url, data)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -53,13 +53,13 @@ function getConnection(defaultUrl, connectionId) {
 }
 
 function fetchConnection(connectionId){
-    var url = configInfo.defaultUrl + "state/get"
-    var data = {
+    const url = configInfo.defaultUrl + "state/get"
+    const data = {
         connectionId: connectionId
     }
-    var result = axios.post(url, data)
+    const result = axios.post(url, data)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
 
     }).catch(function (error){
@@ -70,10 +70,10 @@ function fetchConnection(connectionId){
 
 async function createLogic(url, data, sync){
     try{
-        var defaultUrl = url
-        var connection = await createConnection(defaultUrl, data)
-        var connectionId = connection.connectionId
-        var getConnectionResult = await getConnection(defaultUrl, connectionId)
+        const defaultUrl = url
+        const connection = await createConnection(defaultUrl, data)
+        const connectionId = connection.connectionId
+        const getConnectionResult = await getConnection(defaultUrl, connectionId)
         if (getConnectionResult.connectionId == connectionId){
             console.log("getConnection succeeded")
         } else {
@@ -82,7 +82,7 @@ async function createLogic(url, data, sync){
         // console.log(connection)
         console.log('createConnection succeeded')
         if (getConnectionResult.connectionId != null && sync == true){
-            var syncResult = await connectionSync(defaultUrl, connectionId)
+            const syncResult = await connectionSync(defaultUrl, connectionId)
             if (syncResult != null){
                 console.log(syncResult)
                 console.log('syncConnection succeeded')

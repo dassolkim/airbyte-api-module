@@ -5,16 +5,16 @@ const axios = require('axios').default
 module.exports = {validateLogic, createLogic, removeLogic}
 
 function createDestination(destinationInfo) {
-    var url = destinationInfo.defaultUrl + "destinations/create"
+    const url = destinationInfo.defaultUrl + "destinations/create"
     const body = {
         workspaceId: destinationInfo.workspaceId,
         destinationDefinitionId: destinationInfo.destinationDefinitionId,
         connectionConfiguration: destinationInfo.connectionConfiguration,
         name: destinationInfo.name
     }
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
     }).catch(function (error){
         console.log(error)
@@ -23,13 +23,13 @@ function createDestination(destinationInfo) {
 }
 
 function getDestination(defaultUrl, destinationId){
-    var url = defaultUrl + "destinations/get"
+    const url = defaultUrl + "destinations/get"
     const body = {
         destinationId: destinationId
     };
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         return data
     }).catch(function (error){
         console.log(error)
@@ -38,13 +38,13 @@ function getDestination(defaultUrl, destinationId){
 }
 
 function deleteDestination(defaultUrl, destinationId) {
-    var url = defaultUrl + "destinations/delete"
+    const url = defaultUrl + "destinations/delete"
     const body = {
         destinationId: destinationId
     }
-    var result = axios.post(url, body)
+    const result = axios.post(url, body)
     .then(function (response){
-        var data = response.data
+        const data = response.data
         console.log("deleteDestination result: ", data)
         return true
     }).catch(function (error){
@@ -55,19 +55,19 @@ function deleteDestination(defaultUrl, destinationId) {
 
 async function validateLogic(destinationInfo, delDestination) {
     try{
-        var defaultUrl = destinationInfo.defaultUrl
-        var destination = await createDestination(destinationInfo)
-        var destinationId = destination.destinationId
-        var check
+        const defaultUrl = destinationInfo.defaultUrl
+        const destination = await createDestination(destinationInfo)
+        const destinationId = destination.destinationId
+        let check
         console.log("created destinationId: ", destinationId)
         if (destinationId != null){
-            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            const getDestinationResult = await getDestination(defaultUrl, destinationId)
             if (getDestinationResult.destinationId == destinationId){
                 check = true
                 console.log(getDestinationResult)
                 console.log("getDestination succeeded")       
                 if (delDestination == true){    
-                    var deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
+                    const deleteDestinationResult = await deleteDestination(defaultUrl, destinationId)
                     if (deleteDestinationResult == true){
                         console.log("deleteDestination succeeded")
                     } else {
@@ -93,11 +93,11 @@ async function validateLogic(destinationInfo, delDestination) {
 
 async function createLogic(destinationInfo) {
     try{
-        var defaultUrl = destinationInfo.defaultUrl
-        var destination = await createDestination(destinationInfo)
-        var destinationId = destination.destinationId
+        const defaultUrl = destinationInfo.defaultUrl
+        const destination = await createDestination(destinationInfo)
+        const destinationId = destination.destinationId
         if (destinationId != null){
-            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            const getDestinationResult = await getDestination(defaultUrl, destinationId)
             if (getDestinationResult.destinationId == destinationId){
                 console.log("created destinationId: ", destinationId)
                 console.log("createDestination succeeded")
@@ -114,14 +114,14 @@ async function createLogic(destinationInfo) {
 
 async function removeLogic(destinationInfo, destinationId) {
     try{
-        var defaultUrl = destinationInfo.defaultUrl
+        const defaultUrl = destinationInfo.defaultUrl
         if (destinationId != null){
-            var getDestinationResult = await getDestination(defaultUrl, destinationId)
+            const getDestinationResult = await getDestination(defaultUrl, destinationId)
             if (getDestinationResult.destinationId == destinationId){
                 console.log("removed destinationId: ", destinationId)
                 console.log("getDestination succeeded")
             }
-            var delDestinationResult = await deleteDestination(defaultUrl, destinationId)
+            const delDestinationResult = await deleteDestination(defaultUrl, destinationId)
             if (delDestinationResult == true){
                 console.log("deleteDestination succeeded")
                 return true

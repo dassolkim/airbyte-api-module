@@ -4,7 +4,7 @@ const connectionLogic = require('../../airbyte/connection/connectionLogic')
 // const configInfo = require('../config/connectConfig')
 // const uuidv1 = require('uuid/v1')
 
-module.exports = {create, choice}
+module.exports = {create, choice, createCustom}
 
 async function create(sourceInfo, destinationInfo, connectionInfo, catalog){
     // console.log("Start sourceLogic")
@@ -90,4 +90,53 @@ async function choice(data, drop){
     console.log(newCatalog)
     // source.syncCatalog = newData
     return newCatalog
+}
+
+async function createCustom(sourceInfo, destinationInfo, connectionInfo, catalog){
+    // console.log("Start sourceLogic")
+    console.time("distribution/create api call during time")
+    const source = await sourceLogic.createLogic(sourceInfo)
+    // console.log("sourceLogic return: ", source)
+    if (source == null){
+        console.log("source/createLogic failed")
+        return false
+    }
+    let destination
+    if(destinationInfo.exist == true){
+        destination = destinationInfo.destinationId
+    } else{
+        destination = await destinationLogic.createLogic(destinationInfo)
+        // console.log("destinationLogic return: ", destination)
+        if (destination == null){
+            console.log("destination/createLogic failed")
+            return false
+        }
+    }
+    
+    // let syncCatalog
+    // if (sourceInfo.sourceType == 'file'){
+    //     syncCatalog = catalog
+    // } else {
+    //     syncCatalog = choice()
+    // }
+    const connection = {
+        sourceId: source,
+        syncCatalog: catalog
+    }
+    // const connection = source
+    connection.destinationId = destination
+    connection.status = connectionInfo.status
+    connection.operationIds = [connectionInfo.operationId]
+    const sync = connectionInfo.sync
+    const url = connectionInfo.defaultUrl
+    console.log("start connection logic (create and sync)")
+    const connectionLogicReturn = await connectionLogic.createLogic(url, connection, sync)
+    console.timeEnd("distribution/create api call during time")
+    if (connectionLogicReturn == true){
+        console.log("connection/createLogic succeeded")
+        return true
+    } else {
+        console.log("connection/createLogic failed")
+        return false
+    }
 }

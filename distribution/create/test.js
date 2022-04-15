@@ -1,4 +1,4 @@
-const configInfo = require('../../config/connectConfig')
+const configInfo = require('../../../config/connectConfig')
 const validate = require('../validate/validate')
 const create = require('./create')
 
@@ -20,7 +20,7 @@ async function main(){
         connectionConfiguration: configInfo.connectSource,
         workspaceId: configInfo.workspaceId,
         sourceDefinitionId: configInfo.sourceDefinitionId,
-        name: 'dbSource_test'
+        name: 'dbSource_test1'
     }
     const destinationInfo = {
         defaultUrl: configInfo.defaultUrl,

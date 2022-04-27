@@ -8,7 +8,7 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = {validateLogic, createLogic, removeLogic}
+module.exports = {validateLogic, createLogic, removeLogic, odlLogic}
 // module.exports = {createSource, getSource, discoverSource, deleteSource}
 function createSource(sourceInfo) {
     const url = sourceInfo.defaultUrl + "sources/create"
@@ -118,7 +118,7 @@ async function validateLogic(sourceInfo, delSource) {
         }else{
             const null_catalog = {
                 sourceId: sourceId,
-                stremas: null
+                streams: null
             }
             return null_catalog
         }
@@ -150,6 +150,32 @@ async function createLogic(sourceInfo) {
         // }
         // return results
         return sourceId
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function odlLogic(sourceInfo) {
+    try{
+        const defaultUrl = sourceInfo.defaultUrl
+        const source = await createSource(sourceInfo)
+        const sourceId = source.sourceId
+        console.log("created sourceId: ", sourceId)
+        // let catalog
+        const getSourceResult = await getSource(defaultUrl, sourceId)
+        if (getSourceResult.sourceId == sourceId){
+            const discoverResult = await discoverSource(defaultUrl, sourceId)
+            catalog = discoverResult.catalog
+            console.log("discverSource succeeded")
+        } else { 
+            console.log("discoverSource failed")
+            return null
+        }
+        const results = {
+            sourceId: sourceId,
+            syncCatalog: catalog
+        }
+        return results
     } catch (error) {
         console.log(error)
     }

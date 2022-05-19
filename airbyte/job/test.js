@@ -3,12 +3,12 @@ const job = require('./jobLogic')
 
 async function testGet() {
 
-    const jobId = 469 //24
+    const jobId = 1869 //24
     // const defaultUrl = "114.70.235.40:18000"
     const get_result = await job.getJob(configInfo.defaultUrl, jobId)
     // const attemts = get_result.attemts
-    const attempt = get_result.attempts[2].attempt
-    const logs = get_result.attempts[2].logs
+    const attempt = get_result.attempts[0].attempt
+    const logs = get_result.attempts[0].logs
 
     // console.log(get_result)
 
@@ -16,7 +16,7 @@ async function testGet() {
     console.log(logs['logLines'])
 
 }
-testGet()
+// testGet()
 
 async function testDebug() {
 
@@ -34,3 +34,20 @@ async function testDebug() {
 
 }
 // testDebug()
+
+async function testCancel() {
+
+    const jobId =  2090 //24
+    // const defaultUrl = "114.70.235.40:18000/"
+    const get_result = await job.cancelJob(configInfo.defaultUrl, jobId)
+    // const attemts = get_result.attemts
+    // const attempt = get_result.attempts[0].attempt
+    // const logs = get_result.attempts[0].logs
+
+    console.log(get_result)
+
+    // console.log(attempt)
+    // console.log(logs['logLines'])
+
+}
+testCancel()

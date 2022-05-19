@@ -29,6 +29,7 @@ async function create(sourceInfo, destinationInfo, connectionInfo) {
     connection.destinationId = destination
     connection.status = connectionInfo.status
     connection.operationIds = [connectionInfo.operationId]
+    // connection.config = { syncMode: 'full_refresh', destinationSyncMode: 'overwrite'}
     const sync = connectionInfo.sync
     const url = connectionInfo.defaultUrl
     // console.log("start connection logic (create and sync)")

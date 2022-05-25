@@ -203,9 +203,9 @@ async function odlValidateLogic(sourceInfo) {
     }
 }
 
-async function removeLogic(sourceInfo, sourceId) {
+async function removeLogic(defaultUrl, sourceId) {
     try{
-        const defaultUrl = sourceInfo.defaultUrl
+        // const defaultUrl = sourceInfo.defaultUrl
         if (sourceId != null){
             const getSourceResult = await getSource(defaultUrl, sourceId)
             if (getSourceResult.sourceId == sourceId){

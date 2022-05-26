@@ -8,7 +8,7 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = {validateLogic, createLogic, removeLogic, odlLogic, odlValidateLogic}
+module.exports = { validateLogic, createLogic, removeLogic, odlLogic, odlValidateLogic, odlCreateWithSource }
 // module.exports = {createSource, getSource, discoverSource, deleteSource}
 function createSource(sourceInfo) {
     const url = sourceInfo.defaultUrl + "sources/create"
@@ -19,29 +19,29 @@ function createSource(sourceInfo) {
         name: sourceInfo.name
     }
     const result = axios.post(url, body)
-    .then(function (response){
-        const data = response.data
-        return data
+        .then(function (response) {
+            const data = response.data
+            return data
 
-    }).catch(function (error){
-        console.log(error)
-    })
+        }).catch(function (error) {
+            console.log(error)
+        })
     return result
 }
 
-function getSource(defaultUrl, sourceId){
+function getSource(defaultUrl, sourceId) {
     const url = defaultUrl + "sources/get"
     const body = {
         sourceId: sourceId
     };
     const result = axios.post(url, body)
-    .then(function (response){
-        const data = response.data
-        return data
+        .then(function (response) {
+            const data = response.data
+            return data
 
-    }).catch(function (error){
-        console.log(error)
-    })
+        }).catch(function (error) {
+            console.log(error)
+        })
     return result
 }
 
@@ -51,12 +51,12 @@ function discoverSource(defaultUrl, sourceId) {
         sourceId: sourceId
     }
     const result = axios.post(url, body)
-    .then(function (response){
-        const data = response.data
-        return data
-    }).catch(function (error){
-        console.log(error)
-    })
+        .then(function (response) {
+            const data = response.data
+            return data
+        }).catch(function (error) {
+            console.log(error)
+        })
     return result
 }
 
@@ -66,40 +66,40 @@ function deleteSource(defaultUrl, sourceId) {
         sourceId: sourceId
     }
     const result = axios.post(url, body)
-    .then(function (response){
-        const data = response.data
-        console.log("deleteSource result: ", data)
-        return true
-    }).catch(function (error){
-        console.log(error)
-    })
+        .then(function (response) {
+            const data = response.data
+            console.log("deleteSource result: ", data)
+            return true
+        }).catch(function (error) {
+            console.log(error)
+        })
     return result
 }
 
 async function validateLogic(sourceInfo, delSource) {
-    try{
+    try {
         const defaultUrl = sourceInfo.defaultUrl
         const source = await createSource(sourceInfo)
         const sourceId = source.sourceId
         let catalog
-        if (source != null){
+        if (source != null) {
             console.log("created sourceId: ", sourceId)
             const getSourceResult = await getSource(defaultUrl, sourceId)
             // console.log(getSourceResult)
-            if (getSourceResult.sourceId == sourceId){
+            if (getSourceResult.sourceId == sourceId) {
                 console.log("getSource succeeded")
                 const discoverResult = await discoverSource(defaultUrl, sourceId)
                 catalog = discoverResult.catalog
                 // console.log(JSON.stringify(catalog, null, 2))
-                if (catalog != null){
+                if (catalog != null) {
                     console.log("discoverSource succeeded")
                 } else {
                     console.log("discoverSource failed")
                 }
-                if (delSource == true){
+                if (delSource == true) {
                     const deleteSourceResult = await deleteSource(defaultUrl, sourceId)
                     // console.log(deleteSourceResult)
-                    if (deleteSourceResult == true){
+                    if (deleteSourceResult == true) {
                         console.log("deleteSource succeeded")
                     } else {
                         console.log("deleteSource failed")
@@ -112,10 +112,10 @@ async function validateLogic(sourceInfo, delSource) {
             }
         } else {
             console.log("createSource failed")
-        }       
-        if (catalog != null && delSource == true){
-            return catalog           
-        }else{
+        }
+        if (catalog != null && delSource == true) {
+            return catalog
+        } else {
             const null_catalog = {
                 sourceId: sourceId,
                 streams: null
@@ -128,19 +128,19 @@ async function validateLogic(sourceInfo, delSource) {
 }
 
 async function createLogic(sourceInfo) {
-    try{
+    try {
         const defaultUrl = sourceInfo.defaultUrl
         const source = await createSource(sourceInfo)
         const sourceId = source.sourceId
         console.log("created sourceId: ", sourceId)
         // let catalog
         const getSourceResult = await getSource(defaultUrl, sourceId)
-        if (getSourceResult.sourceId == sourceId){
+        if (getSourceResult.sourceId == sourceId) {
             // const discoverResult = await discoverSource(defaultUrl, sourceId)
             // catalog = discoverResult.catalog
             console.log("discverSource succeeded")
             // console.log(JSON.stringify(catalog, null, 2))
-        } else { 
+        } else {
             console.log("discoverSource failed")
             return null
         }
@@ -156,18 +156,18 @@ async function createLogic(sourceInfo) {
 }
 
 async function odlLogic(sourceInfo) {
-    try{
+    try {
         const defaultUrl = sourceInfo.defaultUrl
         const source = await createSource(sourceInfo)
         const sourceId = source.sourceId
         console.log("created sourceId: ", sourceId)
         // let catalog
         const getSourceResult = await getSource(defaultUrl, sourceId)
-        if (getSourceResult.sourceId == sourceId){
+        if (getSourceResult.sourceId == sourceId) {
             const discoverResult = await discoverSource(defaultUrl, sourceId)
             catalog = discoverResult.catalog
             console.log("discverSource succeeded")
-        } else { 
+        } else {
             console.log("discoverSource failed")
             return null
         }
@@ -182,18 +182,18 @@ async function odlLogic(sourceInfo) {
 }
 
 async function odlValidateLogic(sourceInfo) {
-    try{
+    try {
         const defaultUrl = sourceInfo.defaultUrl
         const source = await createSource(sourceInfo)
         const sourceId = source.sourceId
         console.log("created sourceId: ", sourceId)
         // let catalog
         const getSourceResult = await getSource(defaultUrl, sourceId)
-        if (getSourceResult.sourceId == sourceId){
+        if (getSourceResult.sourceId == sourceId) {
             const discoverResult = await discoverSource(defaultUrl, sourceId)
             catalog = discoverResult.catalog
             console.log("discverSource succeeded")
-        } else { 
+        } else {
             console.log("discoverSource failed")
             return null
         }
@@ -203,23 +203,47 @@ async function odlValidateLogic(sourceInfo) {
     }
 }
 
+async function odlCreateWithSource(sourceInfo) {
+    try {
+        const defaultUrl = sourceInfo.defaultUrl
+        const sourceId = sourceInfo.sourceId
+        // let catalog
+        const getSourceResult = await getSource(defaultUrl, sourceId)
+        if (getSourceResult.sourceId == sourceId) {
+            const discoverResult = await discoverSource(defaultUrl, sourceId)
+            catalog = discoverResult.catalog
+            console.log("discverSource succeeded")
+        } else {
+            console.log("discoverSource failed")
+            return null
+        }
+        const results = {
+            sourceId: sourceId,
+            syncCatalog: catalog
+        }
+        return results
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 async function removeLogic(defaultUrl, sourceId) {
-    try{
+    try {
         // const defaultUrl = sourceInfo.defaultUrl
-        if (sourceId != null){
+        if (sourceId != null) {
             const getSourceResult = await getSource(defaultUrl, sourceId)
-            if (getSourceResult.sourceId == sourceId){
+            if (getSourceResult.sourceId == sourceId) {
                 console.log("removed sourceId: ", sourceId)
                 console.log("getSource succeeded")
             }
             const delSourceResult = await deleteSource(defaultUrl, sourceId)
-            if (delSourceResult == true){
+            if (delSourceResult == true) {
                 console.log("deleteSource succeeded")
                 return true
             } else {
                 console.log("deleteSource failed")
             }
-        } else { 
+        } else {
             console.log("getSource failed")
         }
         return false

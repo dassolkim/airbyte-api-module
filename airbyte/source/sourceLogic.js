@@ -10,7 +10,7 @@ const res = require('express/lib/response')
 // shared api
 module.exports = { validateLogic, createLogic, removeLogic, odlLogic, odlValidatewithDiscover,
     odlValidatewithoutDiscover, odlCreateWithSource, odlValidatewithCheckConnection, odlValidateFinal }
-    
+
 // module.exports = {createSource, getSource, discoverSource, deleteSource}
 function createSource(sourceInfo) {
     const url = sourceInfo.defaultUrl + "sources/create"
@@ -248,7 +248,7 @@ async function odlValidateFinal(sourceInfo) {
         
         // let catalog
         const checkSource = await checkConnectionSource(defaultUrl, sourceId)
-        if (checkSource.status == 'succeded') {
+        if (checkSource.status == 'succeeded') {
             console.log("created and validated sourceId: ", sourceId)
             return sourceId
         } else {

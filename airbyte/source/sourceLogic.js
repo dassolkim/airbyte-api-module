@@ -8,7 +8,9 @@ const res = require('express/lib/response')
 */
 
 // shared api
-module.exports = { validateLogic, createLogic, removeLogic, odlLogic, odlValidatewithDiscover, odlValidatewithoutDiscover, odlCreateWithSource }
+module.exports = { validateLogic, createLogic, removeLogic, odlLogic, odlValidatewithDiscover,
+    odlValidatewithoutDiscover, odlCreateWithSource, odlValidatewithCheckConnection, odlValidateFinal }
+    
 // module.exports = {createSource, getSource, discoverSource, deleteSource}
 function createSource(sourceInfo) {
     const url = sourceInfo.defaultUrl + "sources/create"
@@ -47,6 +49,21 @@ function getSource(defaultUrl, sourceId) {
 
 function discoverSource(defaultUrl, sourceId) {
     const url = defaultUrl + "sources/discover_schema"
+    const body = {
+        sourceId: sourceId
+    }
+    const result = axios.post(url, body)
+        .then(function (response) {
+            const data = response.data
+            return data
+        }).catch(function (error) {
+            console.log(error)
+        })
+    return result
+}
+
+function checkConnectionSource(defaultUrl, sourceId) {
+    const url = defaultUrl + "sources/check_connection"
     const body = {
         sourceId: sourceId
     }
@@ -216,6 +233,43 @@ async function odlValidatewithoutDiscover(sourceInfo) {
             return sourceId
         } else {
             // console.log("discoverSource failed")
+            return null
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function odlValidateFinal(sourceInfo) {
+    try {
+        const defaultUrl = sourceInfo.defaultUrl
+        const source = await createSource(sourceInfo)
+        const sourceId = source.sourceId
+        
+        // let catalog
+        const checkSource = await checkConnectionSource(defaultUrl, sourceId)
+        if (checkSource.status == 'succeded') {
+            console.log("created and validated sourceId: ", sourceId)
+            return sourceId
+        } else {
+            // console.log("discoverSource failed")
+            return null
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function odlValidatewithCheckConnection(sourceInfo) {
+    try {
+        const defaultUrl = sourceInfo.defaultUrl
+        const sourceId = sourceInfo.sourceId
+        const check = await checkConnectionSource(defaultUrl, sourceId)
+
+        if (check.status == 'succeeded') {
+            console.log("check connection is succeeded: ", sourceId)
+            return true
+        } else {
             return null
         }
     } catch (error) {

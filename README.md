@@ -1,4 +1,4 @@
-# airbyte-api-module
+# Airbyte manager
 
-This repository is an Airbyte wrapper api module for open-data-handler
+Airbyte manager is a module that supports automatic table extraction and migration
 
